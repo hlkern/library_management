@@ -1,6 +1,5 @@
 package com.atmosware.library_project.business.dtos;
 
-import com.atmosware.library_project.entities.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
