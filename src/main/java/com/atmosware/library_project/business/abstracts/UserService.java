@@ -1,17 +1,18 @@
 package com.atmosware.library_project.business.abstracts;
 
-import com.atmosware.library_project.entities.User;
+import com.atmosware.library_project.business.dtos.UserRequest;
+import com.atmosware.library_project.business.dtos.UserResponse;
 import java.util.List;
 
 public interface UserService {
 
-    User getById(int id);
+    UserResponse getById(int id);
 
-    List<User> getAll();
+    List<UserResponse> getAll();
 
     void delete(int id);
 
-    User update(User user);
+    UserResponse update(UserRequest userRequest);
 
-    User add(User user);
+    UserResponse add(UserRequest userRequest);
 }

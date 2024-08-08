@@ -22,9 +22,10 @@ public class BaseEntity {
     @Column(name = "update_date")
     private LocalDateTime updatedDate;
 
-    @Column(name = "deleted_date")
-    private LocalDateTime deletedDate;
+    //@Column(name = "deleted_date")
+    //private LocalDateTime deletedDate;
 
-    @Column(name = "active")
-    private boolean active;
+    //@Column(name = "active")
+    //private boolean active;
+
 }

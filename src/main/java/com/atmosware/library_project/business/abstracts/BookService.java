@@ -1,19 +1,19 @@
 package com.atmosware.library_project.business.abstracts;
 
-import com.atmosware.library_project.business.dtos.BookDTO;
-import com.atmosware.library_project.entities.Book;
+import com.atmosware.library_project.business.dtos.BookRequest;
+import com.atmosware.library_project.business.dtos.BookResponse;
 
 import java.util.List;
 
 public interface BookService {
 
-    BookDTO getById(int id);
+    BookResponse getById(int id);
 
-    List<BookDTO> getAll();
+    List<BookResponse> getAll();
 
     void delete(int id);
 
-    BookDTO update(BookDTO bookDTO);
+    BookResponse update(BookRequest bookRequest, int id);
 
-    BookDTO add(BookDTO bookDTO);
+    BookResponse add(BookRequest bookRequest);
 }

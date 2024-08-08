@@ -16,13 +16,9 @@ public class Book extends BaseEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name= "author")
+    @Column(name = "author")
     private String author;
 
-    @ManyToOne()
-    @JoinColumn(name = "category_id")
-    private Category category;
-
-    @Column(name = "units_in_stock")
-    private int unitsInStock;
+    @Column(name = "category")
+    private String category;
 }
