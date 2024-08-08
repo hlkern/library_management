@@ -1,6 +1,6 @@
 package com.atmosware.library_project.core.utilities.mapping;
 
-import com.atmosware.library_project.business.dtos.UserRequest;
+import com.atmosware.library_project.business.dtos.RegisterRequest;
 import com.atmosware.library_project.business.dtos.UserResponse;
 import com.atmosware.library_project.entities.User;
 import org.mapstruct.Mapper;
@@ -13,7 +13,8 @@ public interface UserMapper {
 
     UserMapper INSTANCE = Mappers.getMapper(UserMapper.class);
 
-    UserRequest toDTO(User user);
-    User toEntity(UserRequest userRequest);
+    UserResponse mapToResponse(User user);
     List<UserResponse> mapToResponseList(List<User> users);
+    User mapRequestToEntity(RegisterRequest registerRequest);
+    User mapResponseToEntity(UserResponse userResponse);
 }

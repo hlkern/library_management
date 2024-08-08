@@ -9,10 +9,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
+public class LoginRequest {
 
-    private String userName;
-    private String password;
     private String email;
-    private Role role;
+    private String password;
 }

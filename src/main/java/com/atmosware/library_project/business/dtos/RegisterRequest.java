@@ -10,7 +10,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class UserResponse {
+public class RegisterRequest {
 
     private String userName;
     private String email;
