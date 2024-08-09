@@ -16,4 +16,5 @@ public interface BookMapper {
     BookResponse mapToResponse(Book book);
     Book mapToEntity(BookRequest bookRequest);
     List<BookResponse> mapToResponseList(List<Book> books);
+
 }

@@ -27,9 +27,9 @@ public class SecurityConfiguration
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable); // 101abc
-        securityService.configureSecurity(http); // 101abc => işlemler
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class); // 101abc
+        http.csrf(AbstractHttpConfigurer::disable);
+        securityService.configureSecurity(http);
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 

@@ -23,25 +23,25 @@ public class BookController {
         return this.bookService.add(bookRequest);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/update/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse update(@RequestBody BookRequest bookRequest, @PathVariable int id) {
+    public BookResponse update(@RequestBody BookRequest bookRequest, @PathVariable int bookId) {
 
-        return this.bookService.update(bookRequest, id);
+        return this.bookService.update(bookRequest, bookId);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable int bookId) {
 
-        this.bookService.delete(id);
+        this.bookService.delete(bookId);
     }
 
-    @GetMapping("/getById{id}")
+    @GetMapping("/getById/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse getById(@PathVariable int id) {
+    public BookResponse getById(@PathVariable int bookId) {
 
-        return this.bookService.getById(id);
+        return this.bookService.getById(bookId);
     }
 
     @GetMapping("/getAll")
@@ -49,5 +49,12 @@ public class BookController {
     public List<BookResponse> getAll() {
 
         return this.bookService.getAll();
+    }
+
+    @GetMapping("/getByCategory")
+    @ResponseStatus(HttpStatus.OK)
+    public List<BookResponse> getByCategory(@RequestParam String category) {
+
+        return this.bookService.getByCategory(category);
     }
 }

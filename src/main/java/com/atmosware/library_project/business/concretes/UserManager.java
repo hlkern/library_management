@@ -3,6 +3,7 @@ package com.atmosware.library_project.business.concretes;
 import com.atmosware.library_project.business.abstracts.UserService;
 import com.atmosware.library_project.business.dtos.RegisterRequest;
 import com.atmosware.library_project.business.dtos.UserResponse;
+import com.atmosware.library_project.business.dtos.UserUpdateRequest;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.core.utilities.mapping.UserMapper;
 import com.atmosware.library_project.dataAccess.UserRepository;
@@ -12,6 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Service
@@ -23,19 +26,33 @@ public class UserManager implements UserService {
     @Override
     public void register(RegisterRequest registerRequest) {
 
-        User user = UserMapper.INSTANCE.mapRequestToEntity(registerRequest);
+        User user = UserMapper.INSTANCE.mapRegisterRequestToEntity(registerRequest);
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassword(encodedPassword);
+        user.setCreatedDate(LocalDateTime.now()); //TODO: register olurken role ile ol
 
         userRepository.save(user);
     }
 
     @Override
-    public UserResponse findByUsername(String username) {
+    public UserResponse update(UserUpdateRequest userUpdateRequest, int id) {
 
-        User user = userRepository.findUserByEmail(username).orElseThrow();
+        if(!userRepository.existsById(id)) {
+            throw new BusinessException("User with id: " + id + " does not exist");
+        }
 
-        return UserMapper.INSTANCE.mapToResponse(user);
+        User dbUser = this.userRepository.findById(id).orElse(null);
+
+        String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
+        dbUser.setPassword(encodedPassword);
+        dbUser.setUsername(userUpdateRequest.getUsername());
+        dbUser.setEmail(userUpdateRequest.getEmail());
+        dbUser.setAuthorities(userUpdateRequest.getAuthorities());
+        dbUser.setUpdatedDate(LocalDateTime.now());
+
+        this.userRepository.save(dbUser);
+
+        return UserMapper.INSTANCE.mapToResponse(dbUser);
     }
 
     @Override
@@ -45,4 +62,6 @@ public class UserManager implements UserService {
                 .findUserByEmail(username)
                 .orElseThrow(() -> new BusinessException("Login failed"));
     }
+
+
 }

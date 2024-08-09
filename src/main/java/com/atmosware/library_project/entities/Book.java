@@ -2,13 +2,12 @@ package com.atmosware.library_project.entities;
 
 import com.atmosware.library_project.core.entities.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "books")
 public class Book extends BaseEntity {

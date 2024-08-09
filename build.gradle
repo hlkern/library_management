@@ -23,6 +23,21 @@ repositories {
 	mavenCentral()
 }
 
+ext {
+	springSecurityVersion = '6.3.1'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom "org.springframework.boot:spring-boot-dependencies:3.3.2"
+	}
+	dependencies {
+		dependency "org.springframework.security:spring-security-core:${springSecurityVersion}"
+		dependency "org.springframework.security:spring-security-web:${springSecurityVersion}"
+		dependency "org.springframework.security:spring-security-config:${springSecurityVersion}"
+	}
+}
+
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
@@ -48,3 +63,5 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+

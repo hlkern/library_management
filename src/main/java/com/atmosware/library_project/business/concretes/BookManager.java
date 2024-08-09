@@ -20,13 +20,13 @@ public class BookManager implements BookService {
     private final BookRepository bookRepository;
 
     @Override
-    public BookResponse getById(int id) {
+    public BookResponse getById(int bookId) {
 
-        if(!bookRepository.existsById(id)) {
-            throw new BusinessException("Book with id: " + id + " does not exist"); //TODO : mesajları constant tutalım mı?
+        if(!bookRepository.existsById(bookId)) {
+            throw new BusinessException("Book with id: " + bookId + " does not exist"); //TODO : mesajları constant tutalım mı?
         }
 
-        Book book = this.bookRepository.findById(id).orElse(null);
+        Book book = this.bookRepository.findById(bookId).orElse(null);
 
         return BookMapper.INSTANCE.mapToResponse(book);
     }
@@ -40,28 +40,31 @@ public class BookManager implements BookService {
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int bookId) {
 
-        if(!bookRepository.existsById(id)) {
-            throw new BusinessException("Book with id: " + id + " does not exist");
+        if(!bookRepository.existsById(bookId)) {
+            throw new BusinessException("Book with id: " + bookId + " does not exist");
         }
 
-        this.bookRepository.deleteById(id);
+        this.bookRepository.deleteById(bookId);
     }
 
     @Override
-    public BookResponse update(BookRequest bookRequest, int id) {
+    public BookResponse update(BookRequest bookRequest, int bookId) {
 
-        if(!bookRepository.existsById(id)) {
-            throw new BusinessException("Book with id: " + id + " does not exist");
+        if(!bookRepository.existsById(bookId)) {
+            throw new BusinessException("Book with id: " + bookId + " does not exist");
         }
 
-        Book book = BookMapper.INSTANCE.mapToEntity(bookRequest);
-        book.setUpdatedDate(LocalDateTime.now());
+        Book dbBook = this.bookRepository.findById(bookId).orElse(null);
+        dbBook.setTitle(bookRequest.getTitle());
+        dbBook.setAuthor(bookRequest.getAuthor());
+        dbBook.setCategory(bookRequest.getCategory());
+        dbBook.setUpdatedDate(LocalDateTime.now());
 
-        this.bookRepository.save(book);
+        this.bookRepository.save(dbBook);
 
-        return BookMapper.INSTANCE.mapToResponse(book);
+        return BookMapper.INSTANCE.mapToResponse(dbBook);
     }
 
     @Override
@@ -73,5 +76,13 @@ public class BookManager implements BookService {
         this.bookRepository.save(book);
 
         return BookMapper.INSTANCE.mapToResponse(book);
+    }
+
+    @Override
+    public List<BookResponse> getByCategory(String category) {
+
+        List<Book> books = this.bookRepository.findAllByCategory(category);
+
+        return BookMapper.INSTANCE.mapToResponseList(books);
     }
 }

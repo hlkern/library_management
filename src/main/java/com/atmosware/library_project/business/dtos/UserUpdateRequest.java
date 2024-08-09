@@ -6,14 +6,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class RegisterRequest {
+public class UserUpdateRequest {
 
     private String username;
     private String email;
     private String password;
-    //private Role role;
+    private Set<Role> authorities;
 }

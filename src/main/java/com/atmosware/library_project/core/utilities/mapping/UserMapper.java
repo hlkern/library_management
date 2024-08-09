@@ -2,6 +2,7 @@ package com.atmosware.library_project.core.utilities.mapping;
 
 import com.atmosware.library_project.business.dtos.RegisterRequest;
 import com.atmosware.library_project.business.dtos.UserResponse;
+import com.atmosware.library_project.business.dtos.UserUpdateRequest;
 import com.atmosware.library_project.entities.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
@@ -15,6 +16,7 @@ public interface UserMapper {
 
     UserResponse mapToResponse(User user);
     List<UserResponse> mapToResponseList(List<User> users);
-    User mapRequestToEntity(RegisterRequest registerRequest);
+    User mapRegisterRequestToEntity(RegisterRequest registerRequest);
     User mapResponseToEntity(UserResponse userResponse);
+    User mapUpdateRequestToEntity(UserUpdateRequest updateRequest);
 }

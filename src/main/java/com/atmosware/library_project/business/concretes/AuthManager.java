@@ -7,6 +7,7 @@ import com.atmosware.library_project.business.dtos.UserResponse;
 import com.atmosware.library_project.core.services.JwtService;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.core.utilities.mapping.UserMapper;
+import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +22,7 @@ import java.util.Map;
 @Service
 public class AuthManager implements AuthService {
 
-    private final UserService userService;
+    private final UserRepository userRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
@@ -34,8 +35,11 @@ public class AuthManager implements AuthService {
         if(!authentication.isAuthenticated())
             throw new BusinessException("Invalid email or password");
 
-        UserResponse userResponse = userService.findByUsername(loginRequest.getEmail());
-        User user = UserMapper.INSTANCE.mapResponseToEntity(userResponse);
+        User user = this.userRepository.findUserByEmail(loginRequest.getEmail()).orElse(null);
+
+        if(user == null){
+            throw new BusinessException("Bu email ile bir kullanıcı yok");
+        }
 
         return generateJwt(user);
     }

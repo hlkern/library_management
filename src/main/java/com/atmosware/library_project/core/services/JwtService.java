@@ -15,7 +15,7 @@ import java.util.Map;
 @Service
 public class JwtService
 {
-    private String SECRET_KEY = "abc12345";
+    private String SECRET_KEY = "C53m0R5fXD2VXQwoWbV6Rhqk44l/fY0n6rk67028lFw9ZCU9nIpc0V6N1S7hNGHSj6nNGKszIHMUCGxOwatyQXtcA+HmkiCGtO19bhhVEEhfDVxdYP/PLDTnolseuAMP9bYYmXPUXZ/79iRq90kIsM37Uiw/Q3xFFjHObjzzD78ZP8ucmaavcEBTeW9dpOieMvyS7Zdz4ut/slMtIpq1gKBKBw+r3e3sUbUGmoINGJoBsPEQflbE10J1aTRLLREq1EmUNw9VZmVOtCrVErwKawkQFVniWieqAeQze+OY1BfkjYI11lhO7Y7LyOl3Vx35EezWhrYj8ceajsnEr7CIMg==";
     private long EXPIRATION = 600000;
 
     // Boilerplate => Basmakalıp
