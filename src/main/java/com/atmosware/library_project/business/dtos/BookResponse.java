@@ -1,5 +1,7 @@
 package com.atmosware.library_project.business.dtos;
 
+import com.atmosware.library_project.entities.enums.Status;
+import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,5 +17,5 @@ public class BookResponse {
     private String title;
     private String author;
     private String category;
-
+    private Status status;
 }

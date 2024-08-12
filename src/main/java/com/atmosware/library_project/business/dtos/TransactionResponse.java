@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class TransactionResponse {
 
     private int id;
-    private int bookId;
+    private List<Integer> bookIds;
     private int userId;
     private LocalDateTime borrowDate;
     private LocalDateTime returnDate;

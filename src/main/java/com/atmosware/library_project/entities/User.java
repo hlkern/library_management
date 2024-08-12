@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -24,6 +25,9 @@ public class User extends BaseEntity implements UserDetails {
 
     @Column(name="email")
     private String email;
+
+    @OneToMany(mappedBy = "user")
+    private List<Transaction> transactions;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name="user_role",

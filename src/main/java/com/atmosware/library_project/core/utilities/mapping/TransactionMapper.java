@@ -13,7 +13,7 @@ public interface TransactionMapper {
 
     TransactionMapper INSTANCE = Mappers.getMapper(TransactionMapper.class);
 
-    TransactionRequest toDTO(Transaction transaction);
-    Transaction toEntity(TransactionRequest transactionRequest);
+    Transaction mapToEntity(TransactionRequest transactionRequest);
+    TransactionResponse mapToResponse(Transaction transaction);
     List<TransactionResponse> mapToResponseList(List<Transaction> transactions);
 }

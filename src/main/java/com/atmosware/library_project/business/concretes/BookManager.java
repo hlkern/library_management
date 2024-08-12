@@ -7,6 +7,7 @@ import com.atmosware.library_project.core.utilities.exceptions.types.BusinessExc
 import com.atmosware.library_project.core.utilities.mapping.BookMapper;
 import com.atmosware.library_project.dataAccess.BookRepository;
 import com.atmosware.library_project.entities.Book;
+import com.atmosware.library_project.entities.enums.Status;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class BookManager implements BookService {
         if(!bookRepository.existsById(bookId)) {
             throw new BusinessException("Book with id: " + bookId + " does not exist"); //TODO : mesajları constant tutalım mı?
         }
-
+        //TODO: kontrol işlemlerini managerların altında ayrı methodlarda yap
         Book book = this.bookRepository.findById(bookId).orElse(null);
 
         return BookMapper.INSTANCE.mapToResponse(book);
@@ -72,6 +73,7 @@ public class BookManager implements BookService {
 
         Book book = BookMapper.INSTANCE.mapToEntity(bookRequest);
         book.setCreatedDate(LocalDateTime.now());
+        book.setStatus(Status.NEW);
 
         this.bookRepository.save(book);
 

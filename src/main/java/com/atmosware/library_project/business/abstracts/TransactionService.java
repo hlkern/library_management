@@ -6,13 +6,9 @@ import java.util.List;
 
 public interface TransactionService {
 
-    TransactionResponse getById(int id);
+    TransactionResponse borrowBook(TransactionRequest transactionRequest);
 
-    List<TransactionResponse> getAll();
+    TransactionResponse returnBook(int transactionId, List<Integer> bookIds);
 
-    void delete(int id);
-
-    TransactionResponse update(TransactionRequest transactionRequest);
-
-    TransactionResponse add(TransactionRequest transactionRequest);
+    List<TransactionResponse> getTransactionsByUserId(int userId);
 }
