@@ -1,6 +1,7 @@
 package com.atmosware.library_project.business.concretes;
 
 import com.atmosware.library_project.business.abstracts.BookService;
+import com.atmosware.library_project.business.abstracts.NotificationService;
 import com.atmosware.library_project.business.dtos.BookRequest;
 import com.atmosware.library_project.business.dtos.BookResponse;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
@@ -19,6 +20,7 @@ import java.util.List;
 public class BookManager implements BookService {
 
     private final BookRepository bookRepository;
+    private final NotificationService notificationService;
 
     @Override
     public BookResponse getById(int bookId) {
@@ -76,6 +78,12 @@ public class BookManager implements BookService {
         book.setStatus(Status.NEW);
 
         this.bookRepository.save(book);
+
+        String mail = "user@example.com"; //TODO yalnız oturum açan kullanıcıya mı mail gönderilecek yoksa tüm kullanıcılara mı
+        String subject = "The book has been borrowes";
+        String body = "Dear customer, you borrowed the book with ID" + book.getId();
+
+        notificationService.sendNotification(mail, subject, body);
 
         return BookMapper.INSTANCE.mapToResponse(book);
     }
