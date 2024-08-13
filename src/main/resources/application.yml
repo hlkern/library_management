@@ -12,3 +12,14 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+  mail:
+    host: smtp.mailtrap.io
+    port: 2525
+    username: 2e030996daeaa2  # Mailtrap kullanıcı adınız
+    password: 97d2c4bb9bd407  # Mailtrap şifreniz
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true

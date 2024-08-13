@@ -24,7 +24,7 @@ public class NotificationManager implements NotificationService {
             helper.setText(body, true);
             helper.setTo(mail);
             helper.setSubject(subject);
-            helper.setFrom("no-reply@library.com");
+            helper.setFrom("2e030996daeaa2");
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email", e);
