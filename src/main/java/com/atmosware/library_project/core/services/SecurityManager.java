@@ -15,7 +15,8 @@ public class SecurityManager implements SecurityService
             "/v3/api-docs/**",
             "/api/auth/**",
             "/api/users/**",
-            "/api/books/**"
+            "/api/books/**",
+            "/api/transactions/**"
     };
 
     @Override
@@ -33,6 +34,7 @@ public class SecurityManager implements SecurityService
                 .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırakma
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST).permitAll()
+                        .requestMatchers(HttpMethod.GET).permitAll()
                         .requestMatchers(WHITE_LIST_URLS).permitAll() // Bu URL'leri serbest bırakma
                         .anyRequest().authenticated() // Diğer tüm istekler kimlik doğrulama gerektirir
                 )

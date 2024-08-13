@@ -8,7 +8,9 @@ public interface TransactionService {
 
     TransactionResponse borrowBook(TransactionRequest transactionRequest);
 
-    TransactionResponse returnBook(int transactionId, List<Integer> bookIds);
+    TransactionResponse returnBook(Long transactionId, List<Long> bookIds);
 
-    List<TransactionResponse> getTransactionsByUserId(int userId);
+    List<TransactionResponse> getTransactionsByUserId(Long userId);
+
+    List<TransactionResponse> getAll();
 }

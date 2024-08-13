@@ -25,21 +25,21 @@ public class BookController {
 
     @PutMapping("/update/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse update(@RequestBody BookRequest bookRequest, @PathVariable int bookId) {
+    public BookResponse update(@RequestBody BookRequest bookRequest, @PathVariable Long bookId) {
 
         return this.bookService.update(bookRequest, bookId);
     }
 
     @DeleteMapping("/delete/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public void delete(@PathVariable int bookId) {
+    public void delete(@PathVariable Long bookId) {
 
         this.bookService.delete(bookId);
     }
 
     @GetMapping("/getById/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse getById(@PathVariable int bookId) {
+    public BookResponse getById(@PathVariable Long bookId) {
 
         return this.bookService.getById(bookId);
     }

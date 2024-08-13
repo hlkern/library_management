@@ -15,9 +15,9 @@ import java.util.List;
 @Setter
 public class TransactionResponse {
 
-    private int id;
-    private List<Integer> bookIds;
-    private int userId;
+    private Long id;
+    private List<Long> bookIds;
+    private Long userId;
     private LocalDateTime borrowDate;
     private LocalDateTime returnDate;
     private Status status;

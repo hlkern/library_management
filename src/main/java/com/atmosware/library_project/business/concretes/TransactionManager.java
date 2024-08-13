@@ -9,6 +9,7 @@ import com.atmosware.library_project.core.utilities.mapping.TransactionMapper;
 import com.atmosware.library_project.dataAccess.BookRepository;
 import com.atmosware.library_project.dataAccess.TransactionRepository;
 import com.atmosware.library_project.dataAccess.UserRepository;
+import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.Transaction;
 import com.atmosware.library_project.entities.enums.Status;
 import lombok.AllArgsConstructor;
@@ -16,8 +17,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
-@Service
+@Service("customTransactionManager")
 @AllArgsConstructor
 public class TransactionManager implements TransactionService {
 
@@ -32,19 +34,40 @@ public class TransactionManager implements TransactionService {
             throw new BusinessException("User with id: " + transactionRequest.getUserId() + " does not exist");
         }
 
-        Transaction transaction = new Transaction();
+        Transaction transaction = TransactionMapper.INSTANCE.mapToEntity(transactionRequest.getUserId(), transactionRequest);
+
+        List<Book> books = transactionRequest.getBookIds().stream()
+                .map(bookId -> this.bookRepository.findById(bookId)
+                        .orElseThrow(() -> new BusinessException("Book with id: " + bookId + " does not exist")))
+                .peek(book -> book.setStatus(Status.BORROWED))
+                .map(bookRepository::save)
+                .collect(Collectors.toList());
+
+        transaction.setBooks(books);
         transaction.setCreatedDate(LocalDateTime.now());
         transaction.setStatus(Status.BORROWED);
+        this.transactionRepository.save(transaction);
+
+        return TransactionMapper.INSTANCE.mapToResponse(transaction);
+    }
+
+    @Override
+    public TransactionResponse returnBook(Long transactionId, List<Long> bookIds) {
         return null;
     }
 
     @Override
-    public TransactionResponse returnBook(int transactionId, List<Integer> bookIds) {
-        return null;
-    }
-
-    @Override
-    public List<TransactionResponse> getTransactionsByUserId(int userId) {
+    public List<TransactionResponse> getTransactionsByUserId(Long userId) {
         return List.of();
     }
+
+    @Override
+    public List<TransactionResponse> getAll() {
+
+        List<Transaction> transactions = transactionRepository.findAll();
+
+        return TransactionMapper.INSTANCE.mapToResponseList(transactions);
+    }
+
+
 }

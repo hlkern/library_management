@@ -9,5 +9,5 @@ public interface UserService extends UserDetailsService {
 
     void register(RegisterRequest request);
 
-    UserResponse update(UserUpdateRequest userUpdateRequest, int id);
+    UserResponse update(UserUpdateRequest userUpdateRequest, Long id);
 }

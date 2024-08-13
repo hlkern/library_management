@@ -14,6 +14,6 @@ import java.util.List;
 @Setter
 public class TransactionRequest {
 
-    private List<Integer> bookIds;
-    private int userId;
+    private List<Long> bookIds;
+    private Long userId;
 }

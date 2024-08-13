@@ -23,7 +23,7 @@ public class BookManager implements BookService {
     private final NotificationService notificationService;
 
     @Override
-    public BookResponse getById(int bookId) {
+    public BookResponse getById(Long bookId) {
 
         if(!bookRepository.existsById(bookId)) {
             throw new BusinessException("Book with id: " + bookId + " does not exist"); //TODO : mesajları constant tutalım mı?
@@ -43,7 +43,7 @@ public class BookManager implements BookService {
     }
 
     @Override
-    public void delete(int bookId) {
+    public void delete(Long bookId) {
 
         if(!bookRepository.existsById(bookId)) {
             throw new BusinessException("Book with id: " + bookId + " does not exist");
@@ -53,7 +53,7 @@ public class BookManager implements BookService {
     }
 
     @Override
-    public BookResponse update(BookRequest bookRequest, int bookId) {
+    public BookResponse update(BookRequest bookRequest, Long bookId) {
 
         if(!bookRepository.existsById(bookId)) {
             throw new BusinessException("Book with id: " + bookId + " does not exist");
@@ -79,11 +79,11 @@ public class BookManager implements BookService {
 
         this.bookRepository.save(book);
 
-        String mail = "user@example.com"; //TODO yalnız oturum açan kullanıcıya mı mail gönderilecek yoksa tüm kullanıcılara mı
-        String subject = "The book has been borrowes";
-        String body = "Dear customer, you borrowed the book with ID" + book.getId();
-
-        notificationService.sendNotification(mail, subject, body);
+//        String mail = "user@example.com"; //TODO yalnız oturum açan kullanıcıya mı mail gönderilecek yoksa tüm kullanıcılara mı
+//        String subject = "The book has been borrowes";
+//        String body = "Dear customer, you borrowed the book with ID" + book.getId();
+//
+//        notificationService.sendNotification(mail, subject, body);
 
         return BookMapper.INSTANCE.mapToResponse(book);
     }

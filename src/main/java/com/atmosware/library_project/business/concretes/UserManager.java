@@ -35,7 +35,7 @@ public class UserManager implements UserService {
     }
 
     @Override
-    public UserResponse update(UserUpdateRequest userUpdateRequest, int id) {
+    public UserResponse update(UserUpdateRequest userUpdateRequest, Long id) {
 
         if(!userRepository.existsById(id)) {
             throw new BusinessException("User with id: " + id + " does not exist");

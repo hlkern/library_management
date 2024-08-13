@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface BookService {
 
-    BookResponse getById(int bookId);
+    BookResponse getById(Long bookId);
 
     List<BookResponse> getAll();
 
-    void delete(int bookId);
+    void delete(Long bookId);
 
-    BookResponse update(BookRequest bookRequest, int bookId);
+    BookResponse update(BookRequest bookRequest, Long bookId);
 
     BookResponse add(BookRequest bookRequest);
 
