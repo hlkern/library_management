@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(uses = UserMapper.class)
+@Mapper(uses = {UserMapper.class, BookMapper.class})
 public interface TransactionMapper {
 
     TransactionMapper INSTANCE = Mappers.getMapper(TransactionMapper.class);
@@ -17,7 +17,11 @@ public interface TransactionMapper {
     @Mapping(target = "user", expression = "java(UserMapper.INSTANCE.userFromId(userId))")
     Transaction mapToEntity(Long userId, TransactionRequest transactionRequest);
 
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "books", target = "bookIds")
     TransactionResponse mapToResponse(Transaction transaction);
 
+    @Mapping(source = "user.id", target = "userId")
+    @Mapping(source = "books", target = "bookIds")
     List<TransactionResponse> mapToResponseList(List<Transaction> transactions);
 }

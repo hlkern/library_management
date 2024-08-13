@@ -7,6 +7,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper
 public interface BookMapper {
@@ -17,4 +18,9 @@ public interface BookMapper {
     Book mapToEntity(BookRequest bookRequest);
     List<BookResponse> mapToResponseList(List<Book> books);
 
+    default List<Long> mapBookIds(List<Book> books) {
+        return books.stream()
+                .map(Book::getId)
+                .collect(Collectors.toList());
+    }
 }

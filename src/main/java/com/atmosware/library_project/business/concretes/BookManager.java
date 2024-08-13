@@ -65,9 +65,9 @@ public class BookManager implements BookService {
         dbBook.setCategory(bookRequest.getCategory());
         dbBook.setUpdatedDate(LocalDateTime.now());
 
-        this.bookRepository.save(dbBook);
+        Book updatedBook = this.bookRepository.save(dbBook);
 
-        return BookMapper.INSTANCE.mapToResponse(dbBook);
+        return BookMapper.INSTANCE.mapToResponse(updatedBook);
     }
 
     @Override
