@@ -9,12 +9,22 @@ import org.springframework.stereotype.Service;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
+import java.util.List;
+
 @Service
 @AllArgsConstructor
 public class NotificationManager implements NotificationService {
 
     private final JavaMailSender mailSender;
 
+    public void sendNotificationToAllUsers(List<String> userEmails, String bookTıtle) {
+        String subject = "New book";
+        String body = "Dear customer, now " + bookTıtle + " is avaliable in our library ";
+
+        for (String email : userEmails) {
+            sendNotification(email, subject, body);
+        }
+    }
     @Override
     public void sendNotification(String mail, String subject, String body) {
         MimeMessage message = mailSender.createMimeMessage();

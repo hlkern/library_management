@@ -25,6 +25,9 @@ public class Transaction extends BaseEntity {
     @Column(name = "status")
     private Status status;
 
+    @Column(name = "due_date")
+    private LocalDateTime dueDate;
+
     @ManyToMany
     @JoinTable(
             name = "book_transactions",

@@ -18,6 +18,7 @@ public class TransactionResponse {
     private Long id;
     private List<Long> bookIds;
     private Long userId;
+    private LocalDateTime dueDate;
     private LocalDateTime borrowDate;
     private LocalDateTime returnDate;
     private Status status;

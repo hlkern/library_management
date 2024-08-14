@@ -6,8 +6,10 @@ import com.atmosware.library_project.business.dtos.UserResponse;
 import com.atmosware.library_project.business.dtos.UserUpdateRequest;
 import com.atmosware.library_project.business.messages.BusinessMessages;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
+import com.atmosware.library_project.core.utilities.mapping.BookMapper;
 import com.atmosware.library_project.core.utilities.mapping.UserMapper;
 import com.atmosware.library_project.dataAccess.UserRepository;
+import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +18,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -64,5 +69,13 @@ public class UserManager implements UserService {
                 .orElseThrow(() -> new BusinessException(BusinessMessages.LOGIN_FAILED));
     }
 
+    @Override
+    public List<String> getAllUserEmails() {
+
+        List<User> users = this.userRepository.findAll();
+        return users.stream()
+                .map(User::getEmail)
+                .collect(Collectors.toList());
+    }
 
 }
