@@ -5,6 +5,7 @@ import com.atmosware.library_project.business.abstracts.TransactionService;
 import com.atmosware.library_project.business.dtos.BookResponse;
 import com.atmosware.library_project.business.dtos.TransactionRequest;
 import com.atmosware.library_project.business.dtos.TransactionResponse;
+import com.atmosware.library_project.business.messages.BusinessMessages;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.core.utilities.mapping.BookMapper;
 import com.atmosware.library_project.core.utilities.mapping.TransactionMapper;
@@ -32,15 +33,13 @@ public class TransactionManager implements TransactionService {
     @Override
     public TransactionResponse borrowBook(TransactionRequest transactionRequest) {
 
-        if(!userRepository.existsById(transactionRequest.getUserId())) {
-            throw new BusinessException("User with id: " + transactionRequest.getUserId() + " does not exist");
-        }
+        checkIfUserExistsByRequest(transactionRequest);
 
         Transaction transaction = TransactionMapper.INSTANCE.mapToEntity(transactionRequest.getUserId(), transactionRequest);
 
         List<Book> books = transactionRequest.getBookIds().stream()
                 .map(bookId -> bookRepository.findById(bookId)
-                        .orElseThrow(() -> new BusinessException("Book with id: " + bookId + " does not exist")))
+                        .orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND)))
                 .map(bookRepository::save)
                 .collect(Collectors.toList());
 
@@ -48,7 +47,7 @@ public class TransactionManager implements TransactionService {
                 .anyMatch(book -> book.getStatus() == Status.BORROWED);
 
         if (anyBookBorrowed) {
-            throw new BusinessException("One or more books are already borrowed");
+            throw new BusinessException(BusinessMessages.ALREADY_BORROWED);
         }
 
         books.forEach(book -> book.setStatus(Status.BORROWED));
@@ -65,22 +64,20 @@ public class TransactionManager implements TransactionService {
     @Override
     public TransactionResponse returnBook(Long transactionId, List<Long> bookIds) {
 
-        if(!transactionRepository.existsById(transactionId)) {
-            throw new BusinessException("Transaction with id: " + transactionId + " does not exist");
-        }
+        checkIfTransactionExistsById(transactionId);
 
         Transaction transaction = this.transactionRepository.findById(transactionId).orElse(null);
 
         List<Book> books = bookIds.stream()
                 .map(bookId -> this.bookRepository.findById(bookId)
-                        .orElseThrow(() -> new BusinessException("Book with id: " + bookId + " does not exist")))
+                        .orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND)))
                 .collect(Collectors.toList());
 
         boolean anyBookAlreadyReturned = books.stream()
                 .anyMatch(book -> book.getStatus() == Status.RETURNED);
 
         if (anyBookAlreadyReturned) {
-            throw new BusinessException("One or more books are already returned");
+            throw new BusinessException(BusinessMessages.ALREADY_RETURNED);
         }
 
         books.forEach(book -> book.setStatus(Status.RETURNED));
@@ -88,7 +85,7 @@ public class TransactionManager implements TransactionService {
         // Mevcut kitap listesini güncelle
         List<Book> allBooksInTransaction = transaction.getBooks();
 
-        // Duplicate kontrolü yaparak yeni kitapları ekle
+        // Duplicate kontrolü yaparak yeni kitapları ekle  TODO: Daha iyi bir yaklaşımla yapılabilir mi?
         for (Book book : books) {
             if (!allBooksInTransaction.contains(book)) {
                 allBooksInTransaction.add(book);
@@ -120,13 +117,32 @@ public class TransactionManager implements TransactionService {
     @Override
     public List<BookResponse> getBorrowedBooksByUserId(Long userId) {
 
-        if(!userRepository.existsById(userId)) {
-            throw new BusinessException("User with id: " + userId + " does not exist");
-        }
+        checkIfUserExistsById(userId);
 
         List<Book> books = this.bookRepository.findBorrowedBooksByUserId(userId, Status.BORROWED);
 
         return BookMapper.INSTANCE.mapToResponseList(books);
+    }
+
+    private void checkIfUserExistsByRequest(TransactionRequest transactionRequest) {
+
+        if(!userRepository.existsById(transactionRequest.getUserId())) {
+            throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
+        }
+    }
+
+    private void checkIfTransactionExistsById(Long transactionId) {
+
+        if(!transactionRepository.existsById(transactionId)) {
+            throw new BusinessException(BusinessMessages.TRANSACTION_NOT_FOUND);
+        }
+    }
+
+    private void checkIfUserExistsById(Long userId) {
+
+        if(!transactionRepository.existsById(userId)) {
+            throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
+        }
     }
 
 }

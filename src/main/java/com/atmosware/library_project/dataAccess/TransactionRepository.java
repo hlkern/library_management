@@ -13,4 +13,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     @Query("SELECT t.books FROM Transaction t WHERE t.user.id = :userId AND t.status = :status")
     List<Book> findBorrowedBooksByUserId(@Param("userId") Long userId, @Param("status") Status status);
+
+    List<Transaction> findByUserId(Long userId);
 }

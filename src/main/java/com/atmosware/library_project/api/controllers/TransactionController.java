@@ -4,6 +4,7 @@ import com.atmosware.library_project.business.abstracts.TransactionService;
 import com.atmosware.library_project.business.dtos.BookResponse;
 import com.atmosware.library_project.business.dtos.TransactionRequest;
 import com.atmosware.library_project.business.dtos.TransactionResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +20,7 @@ public class TransactionController {
 
     @PostMapping("/borrow")
     @ResponseStatus(HttpStatus.CREATED)
-    public TransactionResponse borrowBook(@RequestBody TransactionRequest transactionRequest) {
+    public TransactionResponse borrowBook(@Valid @RequestBody TransactionRequest transactionRequest) {
 
         return this.transactionService.borrowBook(transactionRequest);
     }

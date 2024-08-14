@@ -3,6 +3,7 @@ package com.atmosware.library_project.api.controllers;
 import com.atmosware.library_project.business.abstracts.BookService;
 import com.atmosware.library_project.business.dtos.BookRequest;
 import com.atmosware.library_project.business.dtos.BookResponse;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -18,14 +19,14 @@ public class BookController {
 
     @PostMapping("/add")
     @ResponseStatus(HttpStatus.CREATED)
-    public BookResponse add(@RequestBody BookRequest bookRequest) {
+    public BookResponse add(@Valid @RequestBody BookRequest bookRequest) {
 
         return this.bookService.add(bookRequest);
     }
 
     @PutMapping("/update/{bookId}")
     @ResponseStatus(HttpStatus.OK)
-    public BookResponse update(@RequestBody BookRequest bookRequest, @PathVariable Long bookId) {
+    public BookResponse update(@Valid @RequestBody BookRequest bookRequest, @PathVariable Long bookId) {
 
         return this.bookService.update(bookRequest, bookId);
     }
