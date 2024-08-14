@@ -1,12 +1,10 @@
 package com.atmosware.library_project.business.concretes;
 
 import com.atmosware.library_project.business.abstracts.AuthService;
-import com.atmosware.library_project.business.abstracts.UserService;
 import com.atmosware.library_project.business.dtos.LoginRequest;
-import com.atmosware.library_project.business.dtos.UserResponse;
+import com.atmosware.library_project.business.messages.BusinessMessages;
 import com.atmosware.library_project.core.services.JwtService;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
-import com.atmosware.library_project.core.utilities.mapping.UserMapper;
 import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.User;
 import lombok.AllArgsConstructor;
@@ -33,12 +31,12 @@ public class AuthManager implements AuthService {
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         if(!authentication.isAuthenticated())
-            throw new BusinessException("Invalid email or password");
+            throw new BusinessException(BusinessMessages.LOGIN_FAILED);
 
         User user = this.userRepository.findUserByEmail(loginRequest.getEmail()).orElse(null);
 
         if(user == null){
-            throw new BusinessException("Bu email ile bir kullanıcı yok");
+            throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
         }
 
         return generateJwt(user);

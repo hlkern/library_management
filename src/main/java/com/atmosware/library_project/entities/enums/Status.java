@@ -4,6 +4,5 @@ public enum Status {
 
     NEW,
     BORROWED,
-    RETURNED,
-    UNUSED
+    RETURNED
 }

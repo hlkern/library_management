@@ -4,6 +4,7 @@ import com.atmosware.library_project.business.abstracts.BookService;
 import com.atmosware.library_project.business.abstracts.NotificationService;
 import com.atmosware.library_project.business.dtos.BookRequest;
 import com.atmosware.library_project.business.dtos.BookResponse;
+import com.atmosware.library_project.business.messages.BusinessMessages;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.core.utilities.mapping.BookMapper;
 import com.atmosware.library_project.dataAccess.BookRepository;
@@ -25,10 +26,8 @@ public class BookManager implements BookService {
     @Override
     public BookResponse getById(Long bookId) {
 
-        if(!bookRepository.existsById(bookId)) {
-            throw new BusinessException("Book with id: " + bookId + " does not exist"); //TODO : mesajları constant tutalım mı?
-        }
-        //TODO: kontrol işlemlerini managerların altında ayrı methodlarda yap
+        checkIfBookExistsById(bookId);
+
         Book book = this.bookRepository.findById(bookId).orElse(null);
 
         return BookMapper.INSTANCE.mapToResponse(book);
@@ -45,9 +44,7 @@ public class BookManager implements BookService {
     @Override
     public void delete(Long bookId) {
 
-        if(!bookRepository.existsById(bookId)) {
-            throw new BusinessException("Book with id: " + bookId + " does not exist");
-        }
+        checkIfBookExistsById(bookId);
 
         this.bookRepository.deleteById(bookId);
     }
@@ -55,9 +52,7 @@ public class BookManager implements BookService {
     @Override
     public BookResponse update(BookRequest bookRequest, Long bookId) {
 
-        if(!bookRepository.existsById(bookId)) {
-            throw new BusinessException("Book with id: " + bookId + " does not exist");
-        }
+        checkIfBookExistsById(bookId);
 
         Book dbBook = this.bookRepository.findById(bookId).orElse(null);
         dbBook.setTitle(bookRequest.getTitle());
@@ -94,5 +89,12 @@ public class BookManager implements BookService {
         List<Book> books = this.bookRepository.findAllByCategory(category);
 
         return BookMapper.INSTANCE.mapToResponseList(books);
+    }
+
+    private void checkIfBookExistsById(Long bookId) {
+
+        if(!bookRepository.existsById(bookId)) {
+            throw new BusinessException(BusinessMessages.BOOK_NOT_FOUND);
+        }
     }
 }

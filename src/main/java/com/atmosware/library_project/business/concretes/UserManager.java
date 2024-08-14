@@ -4,6 +4,7 @@ import com.atmosware.library_project.business.abstracts.UserService;
 import com.atmosware.library_project.business.dtos.RegisterRequest;
 import com.atmosware.library_project.business.dtos.UserResponse;
 import com.atmosware.library_project.business.dtos.UserUpdateRequest;
+import com.atmosware.library_project.business.messages.BusinessMessages;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.core.utilities.mapping.UserMapper;
 import com.atmosware.library_project.dataAccess.UserRepository;
@@ -38,7 +39,7 @@ public class UserManager implements UserService {
     public UserResponse update(UserUpdateRequest userUpdateRequest, Long id) {
 
         if(!userRepository.existsById(id)) {
-            throw new BusinessException("User with id: " + id + " does not exist");
+            throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
         }
 
         User dbUser = this.userRepository.findById(id).orElse(null);
@@ -60,7 +61,7 @@ public class UserManager implements UserService {
 
         return userRepository
                 .findUserByEmail(username)
-                .orElseThrow(() -> new BusinessException("Login failed"));
+                .orElseThrow(() -> new BusinessException(BusinessMessages.LOGIN_FAILED));
     }
 
 
