@@ -6,10 +6,8 @@ import com.atmosware.library_project.business.dtos.UserResponse;
 import com.atmosware.library_project.business.dtos.UserUpdateRequest;
 import com.atmosware.library_project.business.messages.BusinessMessages;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
-import com.atmosware.library_project.core.utilities.mapping.BookMapper;
 import com.atmosware.library_project.core.utilities.mapping.UserMapper;
 import com.atmosware.library_project.dataAccess.UserRepository;
-import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.User;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -35,7 +33,7 @@ public class UserManager implements UserService {
         User user = UserMapper.INSTANCE.mapRegisterRequestToEntity(registerRequest);
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassword(encodedPassword);
-        user.setCreatedDate(LocalDateTime.now()); //TODO: register olurken role ile ol
+        user.setCreatedDate(LocalDateTime.now());
 
         userRepository.save(user);
     }
@@ -43,11 +41,7 @@ public class UserManager implements UserService {
     @Override
     public UserResponse update(UserUpdateRequest userUpdateRequest, Long id) {
 
-        if(!userRepository.existsById(id)) {
-            throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
-        }
-
-        User dbUser = this.userRepository.findById(id).orElse(null);
+        User dbUser = this.userRepository.findById(id).orElseThrow(() -> new BusinessException(BusinessMessages.USER_NOT_FOUND));
 
         String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
         dbUser.setPassword(encodedPassword);

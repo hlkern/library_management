@@ -17,9 +17,9 @@ public class NotificationManager implements NotificationService {
 
     private final JavaMailSender mailSender;
 
-    public void sendNotificationToAllUsers(List<String> userEmails, String bookTıtle) {
+    public void sendNotificationToAllUsers(List<String> userEmails, String bookTitle) {
         String subject = "New book";
-        String body = "Dear customer, now " + bookTıtle + " is avaliable in our library ";
+        String body = "Dear customer, now " + bookTitle + " is avaliable in our library ";
 
         for (String email : userEmails) {
             sendNotification(email, subject, body);

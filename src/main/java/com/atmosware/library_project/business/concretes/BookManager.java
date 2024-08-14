@@ -54,9 +54,7 @@ public class BookManager implements BookService {
     @Override
     public BookResponse update(BookRequest bookRequest, Long bookId) {
 
-        checkIfBookExistsById(bookId);
-
-        Book dbBook = this.bookRepository.findById(bookId).orElse(null);
+        Book dbBook = this.bookRepository.findById(bookId).orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND));
         dbBook.setTitle(bookRequest.getTitle());
         dbBook.setAuthor(bookRequest.getAuthor());
         dbBook.setCategory(bookRequest.getCategory());

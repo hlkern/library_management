@@ -13,7 +13,6 @@ import lombok.Setter;
 @Setter
 public class BookResponse {
 
-    private Long id;
     private String title;
     private String author;
     private String category;

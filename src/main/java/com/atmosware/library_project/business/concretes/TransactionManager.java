@@ -43,11 +43,15 @@ public class TransactionManager implements TransactionService {
                 .map(bookRepository::save)
                 .collect(Collectors.toList());
 
-        boolean anyBookBorrowed = books.stream()
-                .anyMatch(book -> book.getStatus() == Status.BORROWED);
+        List<Book> alreadyBorrowedBooks = books.stream()
+                .filter(book -> book.getStatus() == Status.BORROWED)
+                .toList();
 
-        if (anyBookBorrowed) {
-            throw new BusinessException(BusinessMessages.ALREADY_BORROWED);
+        if (!alreadyBorrowedBooks.isEmpty()) {
+            String borrowedBookNames = alreadyBorrowedBooks.stream()
+                    .map(Book::getTitle)
+                    .collect(Collectors.joining(", "));
+            throw new BusinessException(BusinessMessages.ALREADY_BORROWED + borrowedBookNames);
         }
 
         books.forEach(book -> book.setStatus(Status.BORROWED));
@@ -55,6 +59,7 @@ public class TransactionManager implements TransactionService {
         transaction.setBooks(books);
         transaction.setCreatedDate(LocalDateTime.now());
         transaction.setBorrowDate(LocalDateTime.now());
+        transaction.setDueDate(transaction.getBorrowDate().plusDays(30));
         transaction.setStatus(Status.BORROWED);
         this.transactionRepository.save(transaction);
 
@@ -64,14 +69,12 @@ public class TransactionManager implements TransactionService {
     @Override
     public TransactionResponse returnBook(Long transactionId, List<Long> bookIds) {
 
-        checkIfTransactionExistsById(transactionId);
-
-        Transaction transaction = this.transactionRepository.findById(transactionId).orElse(null);
+        Transaction transaction = this.transactionRepository.findById(transactionId).orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND));
 
         List<Book> books = bookIds.stream()
                 .map(bookId -> this.bookRepository.findById(bookId)
                         .orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND)))
-                .collect(Collectors.toList());
+                .toList();
 
         boolean anyBookAlreadyReturned = books.stream()
                 .anyMatch(book -> book.getStatus() == Status.RETURNED);
@@ -128,13 +131,6 @@ public class TransactionManager implements TransactionService {
 
         if(!userRepository.existsById(transactionRequest.getUserId())) {
             throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
-        }
-    }
-
-    private void checkIfTransactionExistsById(Long transactionId) {
-
-        if(!transactionRepository.existsById(transactionId)) {
-            throw new BusinessException(BusinessMessages.TRANSACTION_NOT_FOUND);
         }
     }
 

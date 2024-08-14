@@ -20,7 +20,7 @@ public class ReportController {
 
     @GetMapping("/mostborrowed/{numberOfMostBorrowedBooks}")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookResponse> getMostborrowedBooks(@PathVariable int numberOfMostBorrowedBooks) {
+    public List<BookResponse> getMostBorrowedBooks(@PathVariable int numberOfMostBorrowedBooks) {
 
         return this.reportService.getMostBorrowedBooks(numberOfMostBorrowedBooks);
     }

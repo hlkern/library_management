@@ -15,7 +15,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping("/update/{userId}")
+    @PutMapping("/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse update(@Valid @RequestBody UserUpdateRequest userUpdateRequest, @PathVariable Long userId) {
 

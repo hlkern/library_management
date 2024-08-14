@@ -16,9 +16,8 @@ import java.util.List;
 @Setter
 public class TransactionReportResponse {
 
-    private Long id;
     private List<String> bookNames;
-    private Long userId;
+    private Long userId; //TODO: user email
     private LocalDateTime borrowDate;
     private LocalDateTime returnDate;
     private Status status;

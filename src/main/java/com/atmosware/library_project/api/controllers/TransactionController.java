@@ -25,7 +25,7 @@ public class TransactionController {
         return this.transactionService.borrowBook(transactionRequest);
     }
 
-    @GetMapping("/getAll")
+    @GetMapping("/all")
     @ResponseStatus(HttpStatus.OK)
     public List<TransactionResponse> getAll() {
 
