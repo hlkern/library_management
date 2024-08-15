@@ -45,6 +45,9 @@ public class UserManager implements UserService {
     @Override
     public UserResponse update(UserUpdateRequest userUpdateRequest, Long id) {
 
+        checkIfUserExistsByUsername(userUpdateRequest.getUsername());
+        checkIfUserExistsByEmail(userUpdateRequest.getEmail());
+
         User dbUser = this.userRepository.findById(id).orElseThrow(() -> new BusinessException(BusinessMessages.USER_NOT_FOUND));
 
         String encodedPassword = passwordEncoder.encode(userUpdateRequest.getPassword());
