@@ -10,6 +10,8 @@ import com.atmosware.library_project.core.utilities.mapping.UserMapper;
 import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.User;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,6 +29,7 @@ public class UserManager implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private static final Logger logger = LoggerFactory.getLogger(BookManager.class);
 
     @Override
     public void register(RegisterRequest registerRequest) {
@@ -40,6 +43,8 @@ public class UserManager implements UserService {
         user.setCreatedDate(LocalDateTime.now());
 
         userRepository.save(user);
+
+        logger.info("User with id: {} registered successfully", user.getId());
     }
 
     @Override
@@ -58,6 +63,8 @@ public class UserManager implements UserService {
         dbUser.setUpdatedDate(LocalDateTime.now());
 
         this.userRepository.save(dbUser);
+
+        logger.info("User with id: {} updated successfully", dbUser.getId());
 
         return UserMapper.INSTANCE.mapToResponse(dbUser);
     }
