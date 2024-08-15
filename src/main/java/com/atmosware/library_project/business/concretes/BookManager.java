@@ -12,6 +12,8 @@ import com.atmosware.library_project.dataAccess.BookRepository;
 import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.enums.Status;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -24,6 +26,7 @@ public class BookManager implements BookService {
     private final BookRepository bookRepository;
     private final NotificationService notificationService;
     private final UserService userService;
+    private static final Logger logger = LoggerFactory.getLogger(BookManager.class);
 
     @Override
     public BookResponse getById(Long bookId) {
@@ -49,6 +52,8 @@ public class BookManager implements BookService {
         checkIfBookExistsById(bookId);
 
         this.bookRepository.deleteById(bookId);
+
+        logger.info("Book with id:{} successfully", bookId);
     }
 
     @Override
@@ -62,6 +67,8 @@ public class BookManager implements BookService {
 
         Book updatedBook = this.bookRepository.save(dbBook);
 
+        logger.info("Book with id: {} updated successfully", bookId);
+
         return BookMapper.INSTANCE.mapToResponse(updatedBook);
     }
 
@@ -73,6 +80,8 @@ public class BookManager implements BookService {
         book.setStatus(Status.NEW);
 
         this.bookRepository.save(book);
+
+        logger.info("Book with id: {} added successfully", book.getId());
 
         List<String> userEmails = userService.getAllUserEmails();
 

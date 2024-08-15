@@ -16,6 +16,8 @@ import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.Transaction;
 import com.atmosware.library_project.entities.enums.Status;
 import lombok.AllArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -29,6 +31,7 @@ public class TransactionManager implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private static final Logger logger = LoggerFactory.getLogger(BookManager.class);
 
     @Override
     public TransactionResponse borrowBook(TransactionRequest transactionRequest) {
@@ -62,6 +65,8 @@ public class TransactionManager implements TransactionService {
         transaction.setDueDate(transaction.getBorrowDate().plusDays(30));
         transaction.setStatus(Status.BORROWED);
         this.transactionRepository.save(transaction);
+
+        logger.info("Book borrowing transaction with id: {} done successfully", transaction.getId());
 
         return TransactionMapper.INSTANCE.mapToResponse(transaction);
     }
@@ -105,6 +110,8 @@ public class TransactionManager implements TransactionService {
         }
 
         Transaction updatedTransaction = this.transactionRepository.save(transaction);
+
+        logger.info("Book returning transaction with id: {} done successfully", updatedTransaction.getId());
 
         return TransactionMapper.INSTANCE.mapToResponse(updatedTransaction);
     }
