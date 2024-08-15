@@ -2,7 +2,6 @@ package com.atmosware.library_project.business;
 
 import com.atmosware.library_project.business.concretes.UserManager;
 import com.atmosware.library_project.business.dtos.RegisterRequest;
-import com.atmosware.library_project.business.dtos.UserUpdateRequest;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.Role;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
