@@ -1,6 +1,5 @@
 package com.atmosware.library_project.core.utilities.mapping;
 
-import com.atmosware.library_project.business.dtos.TransactionReportResponse;
 import com.atmosware.library_project.business.dtos.TransactionRequest;
 import com.atmosware.library_project.business.dtos.TransactionResponse;
 import com.atmosware.library_project.entities.Book;
@@ -21,17 +20,13 @@ public interface TransactionMapper {
     @Mapping(target = "user", expression = "java(UserMapper.INSTANCE.userFromId(userId))")
     Transaction mapToEntity(Long userId, TransactionRequest transactionRequest);
 
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "books", target = "bookIds")
+    @Mapping(source = "books", target = "bookNames", qualifiedByName = "mapBooksToNames")
+    @Mapping(source = "user.email", target = "userEmail")
     TransactionResponse mapToResponse(Transaction transaction);
 
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "books", target = "bookIds")
-    List<TransactionResponse> mapToResponseList(List<Transaction> transactions);
-
-    @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "books", target = "bookNames", qualifiedByName = "mapBooksToNames")
-    TransactionReportResponse toTransactionReportResponse(Transaction transaction);
+    @Mapping(source = "user.email", target = "userEmail")
+    List<TransactionResponse> mapToResponseList(List<Transaction> transactions);
 
     @Named("mapBooksToNames")
     default List<String> mapBooksToNames(List<Book> books) {
@@ -40,5 +35,4 @@ public interface TransactionMapper {
                 .collect(Collectors.toList());
     }
 
-    List<TransactionReportResponse> toTransactionReportResponseList(List<Transaction> transactions);
 }

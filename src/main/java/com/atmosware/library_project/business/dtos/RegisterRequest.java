@@ -17,7 +17,7 @@ import lombok.Setter;
 public class RegisterRequest {
 
     @NotNull
-    @Size(min = 5, max = 20)
+    @Size(min = 3, max = 20)
     @Pattern(regexp = "^[a-zA-Z0-9]*$")
     private String username;
 
@@ -30,5 +30,5 @@ public class RegisterRequest {
             message = "Password must be between 8 and 20 characters and include at least one number and one letter")
     private String password;
 
-    //private Role role; TODO: rol aktif et
+    private Role role;
 }

@@ -15,8 +15,8 @@ import java.util.List;
 @Setter
 public class TransactionResponse {
 
-    private List<Long> bookIds;
-    private Long userId;    //TODO idlerin yerine name ya da email
+    private List<String> bookNames;
+    private String userEmail;
     private LocalDateTime dueDate;
     private LocalDateTime borrowDate;
     private LocalDateTime returnDate;

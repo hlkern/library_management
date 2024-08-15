@@ -88,7 +88,7 @@ public class TransactionManager implements TransactionService {
         // Mevcut kitap listesini güncelle
         List<Book> allBooksInTransaction = transaction.getBooks();
 
-        // Duplicate kontrolü yaparak yeni kitapları ekle  TODO: Daha iyi bir yaklaşımla yapılabilir mi?
+        // Duplicate kontrolü yaparak yeni kitapları ekle
         for (Book book : books) {
             if (!allBooksInTransaction.contains(book)) {
                 allBooksInTransaction.add(book);

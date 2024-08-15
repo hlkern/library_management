@@ -3,7 +3,7 @@ package com.atmosware.library_project.api.controllers;
 
 import com.atmosware.library_project.business.abstracts.ReportService;
 import com.atmosware.library_project.business.dtos.BookResponse;
-import com.atmosware.library_project.business.dtos.TransactionReportResponse;
+import com.atmosware.library_project.business.dtos.TransactionResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,7 +27,7 @@ public class ReportController {
 
     @GetMapping("/userhistory/{userId}")
     @ResponseStatus(HttpStatus.OK)
-    public List<TransactionReportResponse> getUserHistory(@PathVariable Long userId) {
+    public List<TransactionResponse> getUserHistory(@PathVariable Long userId) {
 
         return this.reportService.getUserHistory(userId);
     }

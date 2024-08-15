@@ -2,7 +2,7 @@ package com.atmosware.library_project.business.concretes;
 
 import com.atmosware.library_project.business.abstracts.ReportService;
 import com.atmosware.library_project.business.dtos.BookResponse;
-import com.atmosware.library_project.business.dtos.TransactionReportResponse;
+import com.atmosware.library_project.business.dtos.TransactionResponse;
 import com.atmosware.library_project.business.messages.BusinessMessages;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.core.utilities.mapping.BookMapper;
@@ -39,13 +39,13 @@ public class ReportManager implements ReportService {
     }
 
     @Override
-    public List<TransactionReportResponse> getUserHistory(Long userId) {
+    public List<TransactionResponse> getUserHistory(Long userId) {
 
         checkIfUserExistsById(userId);
 
         List<Transaction> transactions = this.transactionRepository.findByUserId(userId);
 
-        return TransactionMapper.INSTANCE.toTransactionReportResponseList(transactions);
+        return TransactionMapper.INSTANCE.mapToResponseList(transactions);
     }
 
     @Override

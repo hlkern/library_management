@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -29,6 +30,9 @@ public class UserManager implements UserService {
 
     @Override
     public void register(RegisterRequest registerRequest) {
+
+        checkIfUserExistsByUsername(registerRequest.getUsername());
+        checkIfUserExistsByEmail(registerRequest.getEmail());
 
         User user = UserMapper.INSTANCE.mapRegisterRequestToEntity(registerRequest);
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
@@ -70,6 +74,22 @@ public class UserManager implements UserService {
         return users.stream()
                 .map(User::getEmail)
                 .collect(Collectors.toList());
+    }
+
+    private void checkIfUserExistsByUsername(String username) {
+
+        Optional<User> existingUser = userRepository.findByUsername(username);
+        if (existingUser.isPresent()) {
+            throw new BusinessException(BusinessMessages.USER_ALREADY_EXISTS);
+        }
+    }
+
+    private void checkIfUserExistsByEmail(String email) {
+
+        Optional<User> existingUser = userRepository.findUserByEmail(email);
+        if (existingUser.isPresent()) {
+            throw new BusinessException(BusinessMessages.EMAIL_ALREADY_EXISTS);
+        }
     }
 
 }
