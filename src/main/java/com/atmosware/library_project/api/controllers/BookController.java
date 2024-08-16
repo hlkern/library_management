@@ -52,7 +52,7 @@ public class BookController {
         return this.bookService.getAll();
     }
 
-    @GetMapping
+    @GetMapping("/category")
     @ResponseStatus(HttpStatus.OK)
     public List<BookResponse> getByCategory(@RequestParam String category) {
 

@@ -1,10 +1,10 @@
 package com.atmosware.library_project.api.controllers;
 
 import com.atmosware.library_project.business.abstracts.BookSearchService;
+import com.atmosware.library_project.business.dtos.BookResponse;
+import com.atmosware.library_project.core.utilities.mapping.BookMapper;
 import com.atmosware.library_project.entities.Book;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,12 +19,12 @@ public class SearchController {
     private final BookSearchService bookSearchService;
 
     @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchBooks(
+    public List<BookResponse> searchBooks(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String author,
             @RequestParam(required = false) String category) {
 
         List<Book> books = bookSearchService.searchBooks(title, author, category);
-        return new ResponseEntity<>(books, HttpStatus.OK);
+        return BookMapper.INSTANCE.mapToResponseList(books);
     }
 }
