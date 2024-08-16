@@ -29,7 +29,7 @@ public class UserManager implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private static final Logger logger = LoggerFactory.getLogger(BookManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
 
     @Override
     public void register(RegisterRequest registerRequest) {

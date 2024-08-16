@@ -31,7 +31,7 @@ public interface TransactionMapper {
     @Named("mapBooksToNames")
     default List<String> mapBooksToNames(List<Book> books) {
         return books.stream()
-                .map(Book::getTitle) // Book sınıfında getName() metodunun olduğunu varsayıyorum
+                .map(Book::getTitle)
                 .collect(Collectors.toList());
     }
 

@@ -27,28 +27,17 @@ public class UserManagerTest {
 
     @AfterEach
     void tearDown(){
-        // File.Close
     }
     @BeforeAll
     static void start(){
-        // Bütün testler öncesi 1kez
     }
     @AfterAll
     static void end(){
-        // Bütün testler sonrası 1kez
     }
 
     // TDD => Test Driven Development
     @Test
     void registerWithExistingUsername_ShouldThrowException() {
-
-        // 3A Prensipi
-
-        // Arrange => Kullanılacak verileri, fonksiyonları taşıyan classları vs hazırla.
-        // Act => Hazırladığım yapıda test edilecek fonk. çalıştırılması
-        // Assert => Act'de oluşan durum ile beklenen durum (expected result) uyuşma durumun kontrol eder.
-
-        // Mocking, Mocklama
 
         Mockito.when(userRepository.findByUsername("azizalp")).thenReturn(Optional.of(new User()));
 

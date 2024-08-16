@@ -31,7 +31,7 @@ public class TransactionManager implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
-    private static final Logger logger = LoggerFactory.getLogger(BookManager.class);
+    private static final Logger logger = LoggerFactory.getLogger(TransactionManager.class);
 
     @Override
     public TransactionResponse borrowBook(TransactionRequest transactionRequest) {
@@ -90,10 +90,8 @@ public class TransactionManager implements TransactionService {
 
         books.forEach(book -> book.setStatus(Status.RETURNED));
 
-        // Mevcut kitap listesini güncelle
         List<Book> allBooksInTransaction = transaction.getBooks();
 
-        // Duplicate kontrolü yaparak yeni kitapları ekle
         for (Book book : books) {
             if (!allBooksInTransaction.contains(book)) {
                 allBooksInTransaction.add(book);

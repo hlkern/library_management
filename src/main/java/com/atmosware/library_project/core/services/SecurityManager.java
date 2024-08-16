@@ -23,20 +23,13 @@ public class SecurityManager implements SecurityService
     public HttpSecurity configureSecurity(HttpSecurity http) throws Exception {
 
 
-//        http.authorizeHttpRequests(x-> x
-//                .requestMatchers(WHITE_LIST_URLS).permitAll()
-//                //.requestMatchers(HttpMethod.POST, "/api/v1/cars").hasAnyAuthority(Roles.ADMIN, Roles.MODERATOR)
-//                .anyRequest().authenticated()
-//        );
-//        return http;
-
         http
                 .csrf(AbstractHttpConfigurer::disable) // CSRF korumasını devre dışı bırakma
                 .authorizeHttpRequests(authz -> authz
                         .requestMatchers(HttpMethod.POST).permitAll()
                         .requestMatchers(HttpMethod.GET).permitAll()
-                        .requestMatchers(WHITE_LIST_URLS).permitAll() // Bu URL'leri serbest bırakma
-                        .anyRequest().authenticated() // Diğer tüm istekler kimlik doğrulama gerektirir
+                        .requestMatchers(WHITE_LIST_URLS).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .cors(AbstractHttpConfigurer::disable);
         return http;
