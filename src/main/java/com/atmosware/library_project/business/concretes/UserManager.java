@@ -37,7 +37,7 @@ public class UserManager implements UserService {
         checkIfUserExistsByUsername(registerRequest.getUsername());
         checkIfUserExistsByEmail(registerRequest.getEmail());
 
-        User user = UserMapper.INSTANCE.mapRegisterRequestToEntity(registerRequest);
+        User user = UserMapper.INSTANCE.toEntity(registerRequest);
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassword(encodedPassword);
         user.setCreatedDate(LocalDateTime.now());
