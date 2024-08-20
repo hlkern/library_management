@@ -105,6 +105,7 @@ public class TransactionManager implements TransactionService {
 
         if (allBooksReturned) {
             transaction.setStatus(Status.RETURNED);
+            transaction.setReturnDate(LocalDateTime.now());
         }
 
         Transaction updatedTransaction = this.transactionRepository.save(transaction);
