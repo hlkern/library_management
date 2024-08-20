@@ -2,7 +2,7 @@ Proje Adı: Kütüphane Yönetim Sistemi
 
 Bu proje, kullanıcıların kitap ekleyip güncelleyebileceği, kitap ödünç alıp iade edebileceği ve çeşitli raporlar alabileceği bir kütüphane yönetim sistemidir. Farklı rollere sahip kullanıcıların (öğrenci, öğretmen, personel) farklı yetkileri olacak şekilde yapılandırılmıştır.
 
-Teknolojiler:
+Teknolojiler: 
 * Backend: Java 17, Spring Boot
 * Database: PostgreSQL
 * Containerization: Docker
