@@ -31,6 +31,7 @@ public class TransactionManager implements TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
     private final BookRepository bookRepository;
+    private final BookManager bookManager;
     private static final Logger logger = LoggerFactory.getLogger(TransactionManager.class);
 
     @Override
@@ -72,7 +73,7 @@ public class TransactionManager implements TransactionService {
     }
 
     @Override
-    public TransactionResponse returnBook(Long transactionId, List<Long> bookIds) {
+    public TransactionResponse returnBook(Long transactionId, List<Long> bookIds, List<Double> rates) {
 
         Transaction transaction = this.transactionRepository.findById(transactionId).orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND));
 
@@ -88,7 +89,10 @@ public class TransactionManager implements TransactionService {
             throw new BusinessException(BusinessMessages.ALREADY_RETURNED);
         }
 
-        books.forEach(book -> book.setStatus(Status.RETURNED));
+        for (int i = 0; i < books.size(); i++) {
+            books.get(i).setStatus(Status.RETURNED);
+            bookManager.updateRating(books.get(i).getId(), rates.get(i));
+        }
 
         List<Book> allBooksInTransaction = transaction.getBooks();
 
@@ -102,7 +106,8 @@ public class TransactionManager implements TransactionService {
 
         boolean allBooksReturned = transaction.getBooks().stream()
                 .allMatch(book -> book.getStatus() == Status.RETURNED);
-
+        logger.info("ne durumda {}", transaction.getStatus());
+        logger.info("hepsi döndü mü {}", allBooksReturned);
         if (allBooksReturned) {
             transaction.setStatus(Status.RETURNED);
             transaction.setReturnDate(LocalDateTime.now());

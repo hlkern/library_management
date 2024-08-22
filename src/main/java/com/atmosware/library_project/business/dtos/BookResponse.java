@@ -17,4 +17,5 @@ public class BookResponse {
     private String author;
     private String category;
     private Status status;
+    private double averageRating;
 }

@@ -104,4 +104,17 @@ public class BookManager implements BookService {
             throw new BusinessException(BusinessMessages.BOOK_NOT_FOUND);
         }
     }
+
+    public void updateRating(Long bookId, double newRating) {
+        Book book = this.bookRepository.findById(bookId).orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND));
+
+        double currentRating = book.getRating();
+        int currentRatingCount = book.getRatingCount();
+
+        double updatedRating = (currentRating * currentRatingCount + newRating) / (currentRatingCount + 1);
+        book.setRating(updatedRating);
+        book.setRatingCount(currentRatingCount + 1);
+        logger.info("Book with id: {} updated successfully", bookId);
+        this.bookRepository.save(book);
+    }
 }

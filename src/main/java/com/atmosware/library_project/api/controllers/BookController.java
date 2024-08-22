@@ -58,4 +58,10 @@ public class BookController {
 
         return this.bookService.getByCategory(category);
     }
+
+    @PutMapping("/{bookId}/rate")
+    @ResponseStatus(HttpStatus.OK)
+    public void updateRating(@PathVariable Long bookId, @RequestParam double rating) {
+        this.bookService.updateRating(bookId, rating);
+    }
 }

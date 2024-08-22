@@ -30,4 +30,11 @@ public class Book extends BaseEntity {
 
     @ManyToMany(mappedBy = "books")
     private Set<Transaction> transactions = new HashSet<>();
+
+    @Column(name = "rating")
+    private Double rating = 0.0;
+
+    @Column(name = "rating_count")
+    private Integer ratingCount = 0;
+
 }
