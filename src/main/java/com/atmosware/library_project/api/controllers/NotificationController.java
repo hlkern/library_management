@@ -14,8 +14,8 @@ public class NotificationController {
     private final NotificationService notificationService;
 
     @PostMapping("/send-to-all")
-    public void sendNotificationToAllUsers(@RequestParam List<String> userEmails, @RequestParam String bookTitle) {
-        notificationService.sendNotificationToAllUsers(userEmails, bookTitle);
+    public void sendNotificationToAllUsers(@RequestParam List<String> userEmails, @RequestParam String bookTitle, @RequestParam String bookAuthor) {
+        notificationService.sendNotificationToAllUsers(userEmails, bookTitle, bookAuthor);
     }
 
     @PostMapping("/send")

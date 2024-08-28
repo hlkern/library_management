@@ -17,9 +17,9 @@ public class NotificationManager implements NotificationService {
 
     private final JavaMailSender mailSender;
 
-    public void sendNotificationToAllUsers(List<String> userEmails, String bookTitle) {
-        String subject = "New book";
-        String body = "Dear customer, now " + bookTitle + " is avaliable in our library ";
+    public void sendNotificationToAllUsers(List<String> userEmails, String bookTitle, String bookAuthor) {
+        String subject = "New Book Alert";
+        String body = "Dear customer, now '" + bookTitle + "' by "+ bookAuthor +" is avaliable in our library ";
 
         for (String email : userEmails) {
             sendNotification(email, subject, body);
@@ -34,7 +34,7 @@ public class NotificationManager implements NotificationService {
             helper.setText(body, true);
             helper.setTo(mail);
             helper.setSubject(subject);
-            helper.setFrom("2e030996daeaa2");
+            helper.setFrom("librarymanagement37@outlook.com");
             mailSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send email", e);

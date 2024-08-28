@@ -13,10 +13,10 @@ public class EmailConfiguration {
     @Bean
     public JavaMailSender mailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-        mailSender.setHost("smtp.mailtrap.io");
-        mailSender.setPort(2525);
-        mailSender.setUsername("2e030996daeaa2");
-        mailSender.setPassword("97d2c4bb9bd407");
+        mailSender.setHost("smtp.office365.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("librarymanagement37@outlook.com");
+        mailSender.setPassword("kamil0605");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");

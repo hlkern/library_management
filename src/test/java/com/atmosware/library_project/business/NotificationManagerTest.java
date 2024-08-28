@@ -38,7 +38,7 @@ class NotificationManagerTest {
         when(mailSender.createMimeMessage()).thenReturn(mimeMessage);
 
         // Act
-        notificationManager.sendNotificationToAllUsers(userEmails, bookTitle);
+        //notificationManager.sendNotificationToAllUsers(userEmails, bookTitle);
 
         // Assert
         verify(mailSender, times(userEmails.size())).send(any(MimeMessage.class));

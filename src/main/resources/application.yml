@@ -13,13 +13,17 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
   mail:
-    host: smtp.mailtrap.io
-    port: 2525
-    username: 2e030996daeaa2
-    password: 97d2c4bb9bd407
+    host: smtp.office365.com
+    port: 587
+    username: librarymanagement37@outlook.com
+    password: kamil0605
     properties:
       mail:
         smtp:
           auth: true
           starttls:
             enable: true
+            required: true
+          connectiontimeout: 5000
+          timeout: 3000
+          writetimeout: 5000

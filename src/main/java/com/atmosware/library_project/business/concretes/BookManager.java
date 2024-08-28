@@ -85,7 +85,7 @@ public class BookManager implements BookService {
 
         List<String> userEmails = userService.getAllUserEmails();
 
-        notificationService.sendNotificationToAllUsers(userEmails, book.getTitle());
+        notificationService.sendNotificationToAllUsers(userEmails, book.getTitle(), book.getAuthor());
 
         return BookMapper.INSTANCE.mapToResponse(book);
     }
