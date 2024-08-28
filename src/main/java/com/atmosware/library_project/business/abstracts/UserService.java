@@ -14,4 +14,6 @@ public interface UserService extends UserDetailsService {
     UserResponse update(UserUpdateRequest userUpdateRequest, Long id);
 
     List<String> getAllUserEmails();
+
+    void renewMembership(Long id);
 }

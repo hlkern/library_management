@@ -41,7 +41,7 @@ public class UserManager implements UserService {
         String encodedPassword = passwordEncoder.encode(registerRequest.getPassword());
         user.setPassword(encodedPassword);
         user.setCreatedDate(LocalDateTime.now());
-
+        user.setMembershipExpirationDate(LocalDateTime.now().plusYears(1));
         userRepository.save(user);
 
         logger.info("User with id: {} registered successfully", user.getId());
@@ -86,6 +86,14 @@ public class UserManager implements UserService {
                 .collect(Collectors.toList());
     }
 
+    public void renewMembership(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("User not found"));
+
+        user.setMembershipExpirationDate(user.getMembershipExpirationDate().plusYears(1));
+        userRepository.save(user);
+    }
+
     private void checkIfUserExistsByUsername(String username) {
 
         Optional<User> existingUser = userRepository.findByUsername(username);
@@ -101,5 +109,6 @@ public class UserManager implements UserService {
             throw new BusinessException(BusinessMessages.EMAIL_ALREADY_EXISTS);
         }
     }
+
 
 }

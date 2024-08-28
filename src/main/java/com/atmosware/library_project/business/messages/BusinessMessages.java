@@ -10,5 +10,5 @@ public class BusinessMessages {
     public static String ALREADY_RETURNED = "One or more books are already returned";
     public static String USER_ALREADY_EXISTS = "Username already exists, please try a different username";
     public static String EMAIL_ALREADY_EXISTS = "Email already exists, please try a different email";
-
+    public static String MEMBERSHIP_EXPIRED = "Membership expired. Please renew your membership.";
 }

@@ -14,6 +14,7 @@ import com.atmosware.library_project.dataAccess.TransactionRepository;
 import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.Transaction;
+import com.atmosware.library_project.entities.User;
 import com.atmosware.library_project.entities.enums.Status;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
@@ -34,43 +35,48 @@ public class TransactionManager implements TransactionService {
     private final BookManager bookManager;
     private static final Logger logger = LoggerFactory.getLogger(TransactionManager.class);
 
-    @Override
-    public TransactionResponse borrowBook(TransactionRequest transactionRequest) {
+        @Override
+        public TransactionResponse borrowBook(TransactionRequest transactionRequest) {
 
-        checkIfUserExistsByRequest(transactionRequest);
+            User user = userRepository.findById(transactionRequest.getUserId())
+                    .orElseThrow(() -> new BusinessException(BusinessMessages.USER_NOT_FOUND));
 
-        Transaction transaction = TransactionMapper.INSTANCE.mapToEntity(transactionRequest.getUserId(), transactionRequest);
+            if (user.getMembershipExpirationDate().isBefore(LocalDateTime.now())) {
+                throw new BusinessException(BusinessMessages.MEMBERSHIP_EXPIRED);
+            }
 
-        List<Book> books = transactionRequest.getBookIds().stream()
-                .map(bookId -> bookRepository.findById(bookId)
-                        .orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND)))
-                .map(bookRepository::save)
-                .collect(Collectors.toList());
+            Transaction transaction = TransactionMapper.INSTANCE.mapToEntity(transactionRequest.getUserId(), transactionRequest);
 
-        List<Book> alreadyBorrowedBooks = books.stream()
-                .filter(book -> book.getStatus() == Status.BORROWED)
-                .toList();
+            List<Book> books = transactionRequest.getBookIds().stream()
+                    .map(bookId -> bookRepository.findById(bookId)
+                            .orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND)))
+                    .map(bookRepository::save)
+                    .collect(Collectors.toList());
 
-        if (!alreadyBorrowedBooks.isEmpty()) {
-            String borrowedBookNames = alreadyBorrowedBooks.stream()
-                    .map(Book::getTitle)
-                    .collect(Collectors.joining(", "));
-            throw new BusinessException(BusinessMessages.ALREADY_BORROWED + borrowedBookNames);
+            List<Book> alreadyBorrowedBooks = books.stream()
+                    .filter(book -> book.getStatus() == Status.BORROWED)
+                    .toList();
+
+            if (!alreadyBorrowedBooks.isEmpty()) {
+                String borrowedBookNames = alreadyBorrowedBooks.stream()
+                        .map(Book::getTitle)
+                        .collect(Collectors.joining(", "));
+                throw new BusinessException(BusinessMessages.ALREADY_BORROWED + borrowedBookNames);
+            }
+
+            books.forEach(book -> book.setStatus(Status.BORROWED));
+
+            transaction.setBooks(books);
+            transaction.setCreatedDate(LocalDateTime.now());
+            transaction.setBorrowDate(LocalDateTime.now());
+            transaction.setDueDate(transaction.getBorrowDate().plusDays(30));
+            transaction.setStatus(Status.BORROWED);
+            this.transactionRepository.save(transaction);
+
+            logger.info("Book borrowing transaction with id: {} done successfully", transaction.getId());
+
+            return TransactionMapper.INSTANCE.mapToResponse(transaction);
         }
-
-        books.forEach(book -> book.setStatus(Status.BORROWED));
-
-        transaction.setBooks(books);
-        transaction.setCreatedDate(LocalDateTime.now());
-        transaction.setBorrowDate(LocalDateTime.now());
-        transaction.setDueDate(transaction.getBorrowDate().plusDays(30));
-        transaction.setStatus(Status.BORROWED);
-        this.transactionRepository.save(transaction);
-
-        logger.info("Book borrowing transaction with id: {} done successfully", transaction.getId());
-
-        return TransactionMapper.INSTANCE.mapToResponse(transaction);
-    }
 
     @Override
     public TransactionResponse returnBook(Long transactionId, List<Long> bookIds, List<Double> rates, List<String> comments) {
@@ -139,13 +145,6 @@ public class TransactionManager implements TransactionService {
         List<Book> books = this.bookRepository.findBorrowedBooksByUserId(userId, Status.BORROWED);
 
         return BookMapper.INSTANCE.mapToResponseList(books);
-    }
-
-    private void checkIfUserExistsByRequest(TransactionRequest transactionRequest) {
-
-        if(!userRepository.existsById(transactionRequest.getUserId())) {
-            throw new BusinessException(BusinessMessages.USER_NOT_FOUND);
-        }
     }
 
     private void checkIfUserExistsById(Long userId) {

@@ -24,7 +24,7 @@ public class BookController {
         return this.bookService.add(bookRequest);
     }
 
-    @PutMapping("/{bookId}")
+    @PutMapping("/update/{bookId}")
     @ResponseStatus(HttpStatus.OK)
     public BookResponse update(@Valid @RequestBody BookRequest bookRequest, @PathVariable Long bookId) {
 

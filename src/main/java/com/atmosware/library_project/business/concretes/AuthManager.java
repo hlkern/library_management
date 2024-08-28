@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Service
@@ -34,6 +35,10 @@ public class AuthManager implements AuthService {
             throw new BusinessException(BusinessMessages.LOGIN_FAILED);
 
         User user = this.userRepository.findUserByEmail(loginRequest.getEmail()).orElse(null);
+
+        if (user.getMembershipExpirationDate().isBefore(LocalDateTime.now())) {
+            throw new BusinessException(BusinessMessages.MEMBERSHIP_EXPIRED);
+        }
 
         if(user == null){
             throw new BusinessException(BusinessMessages.USER_NOT_FOUND);

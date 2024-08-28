@@ -15,10 +15,13 @@ public class UserController {
 
     private final UserService userService;
 
-    @PutMapping("/{userId}")
+    @PutMapping("/update/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse update(@Valid @RequestBody UserUpdateRequest userUpdateRequest, @PathVariable Long userId) {
-
         return userService.update(userUpdateRequest, userId);
+    }
+    @PostMapping("/renew/{userId}")
+    public void renewMembership(@PathVariable Long userId) {
+        this.userService.renewMembership(userId);
     }
 }

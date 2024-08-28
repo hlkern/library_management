@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -34,6 +35,9 @@ public class User extends BaseEntity implements UserDetails {
             joinColumns = @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name="role_id"))
     private Set<Role> authorities;
+
+    @Column(name="membership_date")
+    private LocalDateTime membershipExpirationDate;
 
     @Override
     public String getUsername() {
