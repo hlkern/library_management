@@ -34,9 +34,9 @@ public class TransactionController {
 
     @PutMapping("/return/{transactionId}")
     @ResponseStatus(HttpStatus.OK)
-    public TransactionResponse returnBook(@PathVariable Long transactionId, @RequestParam List<Long> bookIds, @RequestParam List<Double> rates) {
+    public TransactionResponse returnBook(@PathVariable Long transactionId, @RequestParam List<Long> bookIds, @RequestParam List<Double> rates, @RequestParam List<String> comments) {
 
-        return this.transactionService.returnBook(transactionId, bookIds, rates);
+        return this.transactionService.returnBook(transactionId, bookIds, rates, comments);
     }
 
     @GetMapping("/user/{userId}")

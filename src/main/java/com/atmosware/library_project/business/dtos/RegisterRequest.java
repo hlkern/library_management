@@ -14,7 +14,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class RegisterRequest {
+public class    RegisterRequest {
 
     @NotNull
     @Size(min = 3, max = 20)

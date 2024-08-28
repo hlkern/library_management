@@ -21,4 +21,6 @@ public interface BookService {
     List<BookResponse> getByCategory(String category);
 
     void updateRating(Long bookId, double newRating);
+
+    void addComment(Long bookId, String comment);
 }

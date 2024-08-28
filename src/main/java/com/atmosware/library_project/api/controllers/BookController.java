@@ -64,4 +64,10 @@ public class BookController {
     public void updateRating(@PathVariable Long bookId, @RequestParam double rating) {
         this.bookService.updateRating(bookId, rating);
     }
+
+    @PostMapping("/{bookId}/comment")
+    @ResponseStatus(HttpStatus.OK)
+    public void addComment(@PathVariable Long bookId, @RequestParam String comment) {
+        this.bookService.addComment(bookId, comment);
+    }
 }

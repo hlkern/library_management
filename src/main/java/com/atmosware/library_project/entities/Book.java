@@ -5,7 +5,9 @@ import com.atmosware.library_project.entities.enums.Status;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -37,4 +39,8 @@ public class Book extends BaseEntity {
     @Column(name = "rating_count")
     private Integer ratingCount = 0;
 
+    @ElementCollection
+    @CollectionTable(name = "book_comments", joinColumns = @JoinColumn(name = "book_id"))
+    @Column(name = "comment")
+    private List<String> comments = new ArrayList<>();
 }

@@ -73,9 +73,14 @@ public class TransactionManager implements TransactionService {
     }
 
     @Override
-    public TransactionResponse returnBook(Long transactionId, List<Long> bookIds, List<Double> rates) {
+    public TransactionResponse returnBook(Long transactionId, List<Long> bookIds, List<Double> rates, List<String> comments) {
 
-        Transaction transaction = this.transactionRepository.findById(transactionId).orElseThrow(() -> new BusinessException(BusinessMessages.BOOK_NOT_FOUND));
+        Transaction transaction = this.transactionRepository.
+                findById(transactionId).orElseThrow(() -> new BusinessException(BusinessMessages.TRANSACTION_NOT_FOUND));
+
+        if (transaction.getStatus() == Status.RETURNED) {
+            throw new BusinessException(BusinessMessages.TRANSACTION_NOT_FOUND);
+        }
 
         List<Book> books = bookIds.stream()
                 .map(bookId -> this.bookRepository.findById(bookId)
@@ -92,6 +97,7 @@ public class TransactionManager implements TransactionService {
         for (int i = 0; i < books.size(); i++) {
             books.get(i).setStatus(Status.RETURNED);
             bookManager.updateRating(books.get(i).getId(), rates.get(i));
+            bookManager.addComment(books.get(i).getId(), comments.get(i));
         }
 
         List<Book> allBooksInTransaction = transaction.getBooks();
@@ -104,10 +110,7 @@ public class TransactionManager implements TransactionService {
 
         transaction.setBooks(allBooksInTransaction);
 
-        boolean allBooksReturned = transaction.getBooks().stream()
-                .allMatch(book -> book.getStatus() == Status.RETURNED);
-        logger.info("ne durumda {}", transaction.getStatus());
-        logger.info("hepsi döndü mü {}", allBooksReturned);
+        boolean allBooksReturned = transaction.getBooks().stream().allMatch(book -> book.getStatus() == Status.RETURNED);
         if (allBooksReturned) {
             transaction.setStatus(Status.RETURNED);
             transaction.setReturnDate(LocalDateTime.now());

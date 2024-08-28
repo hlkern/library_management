@@ -9,7 +9,7 @@ public interface TransactionService {
 
     TransactionResponse borrowBook(TransactionRequest transactionRequest);
 
-    TransactionResponse returnBook(Long transactionId, List<Long> bookIds, List<Double> rates);
+    TransactionResponse returnBook(Long transactionId, List<Long> bookIds, List<Double> rates, List<String> comments);
 
     List<TransactionResponse> getAll();
 

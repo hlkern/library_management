@@ -110,11 +110,24 @@ public class BookManager implements BookService {
 
         double currentRating = book.getRating();
         int currentRatingCount = book.getRatingCount();
-
         double updatedRating = (currentRating * currentRatingCount + newRating) / (currentRatingCount + 1);
+
         book.setRating(updatedRating);
         book.setRatingCount(currentRatingCount + 1);
+
         logger.info("Book with id: {} updated successfully", bookId);
+
         this.bookRepository.save(book);
+    }
+
+    public void addComment(Long bookId, String comment) {
+        Book book = this.bookRepository.findById(bookId).orElseThrow(() -> new BusinessException("Kitap bulunamadı"));
+
+        book.getComments().add(comment);
+
+        logger.info("Book with id: {} updated successfully with a new comment.", bookId);
+
+        this.bookRepository.save(book);
+
     }
 }
