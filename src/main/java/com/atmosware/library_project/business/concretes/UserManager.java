@@ -94,6 +94,24 @@ public class UserManager implements UserService {
         userRepository.save(user);
     }
 
+    public void payFees(Long userId, Double amount) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new BusinessException(BusinessMessages.USER_NOT_FOUND));
+
+        if (amount <= 0) {
+            throw new BusinessException("Payment amount must be greater than zero.");
+        }
+
+        if (amount > user.getOutstandingBalance()) {
+            throw new BusinessException("Payment amount exceeds outstanding balance.");
+        }
+
+        user.setOutstandingBalance(user.getOutstandingBalance() - amount);
+        userRepository.save(user);
+
+        logger.info("User with id: {} has paid {} towards outstanding fees.", userId, amount);
+    }
+
     private void checkIfUserExistsByUsername(String username) {
 
         Optional<User> existingUser = userRepository.findByUsername(username);
@@ -109,6 +127,4 @@ public class UserManager implements UserService {
             throw new BusinessException(BusinessMessages.EMAIL_ALREADY_EXISTS);
         }
     }
-
-
 }

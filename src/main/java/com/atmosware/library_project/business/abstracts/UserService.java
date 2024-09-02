@@ -16,4 +16,6 @@ public interface UserService extends UserDetailsService {
     List<String> getAllUserEmails();
 
     void renewMembership(Long id);
+
+    void payFees(Long userId, Double amount);
 }

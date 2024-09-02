@@ -28,6 +28,9 @@ public class Transaction extends BaseEntity {
     @Column(name = "due_date")
     private LocalDateTime dueDate;
 
+    @Column(name = "late_fee")
+    private Double lateFee = 0.0;
+
     @ManyToMany
     @JoinTable(
             name = "book_transactions",

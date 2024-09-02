@@ -24,4 +24,9 @@ public class UserController {
     public void renewMembership(@PathVariable Long userId) {
         this.userService.renewMembership(userId);
     }
+
+    @PostMapping("/{userId}/pay-fees")
+    public void payFees(@PathVariable Long userId, @RequestParam Double amount) {
+        this.userService.payFees(userId, amount);
+    }
 }

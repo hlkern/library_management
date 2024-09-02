@@ -25,6 +25,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.ChronoUnit.DAYS;
+
 @Service("customTransactionManager")
 @AllArgsConstructor
 public class TransactionManager implements TransactionService {
@@ -43,6 +45,10 @@ public class TransactionManager implements TransactionService {
 
             if (user.getMembershipExpirationDate().isBefore(LocalDateTime.now())) {
                 throw new BusinessException(BusinessMessages.MEMBERSHIP_EXPIRED);
+            }
+
+            if (user.getOutstandingBalance() > 0) {
+                throw new BusinessException(BusinessMessages.UNPAYED_DUES);
             }
 
             Transaction transaction = TransactionMapper.INSTANCE.mapToEntity(transactionRequest.getUserId(), transactionRequest);
@@ -71,6 +77,7 @@ public class TransactionManager implements TransactionService {
             transaction.setBorrowDate(LocalDateTime.now());
             transaction.setDueDate(transaction.getBorrowDate().plusDays(30));
             transaction.setStatus(Status.BORROWED);
+            transaction.setLateFee(0.0);
             this.transactionRepository.save(transaction);
 
             logger.info("Book borrowing transaction with id: {} done successfully", transaction.getId());
@@ -98,6 +105,18 @@ public class TransactionManager implements TransactionService {
 
         if (anyBookAlreadyReturned) {
             throw new BusinessException(BusinessMessages.ALREADY_RETURNED);
+        }
+
+        long daysLate = DAYS.between(transaction.getDueDate(), LocalDateTime.now());
+        double lateFee;
+
+        if (daysLate > 0) {
+            lateFee = daysLate * 10.0;
+            transaction.setLateFee(lateFee);
+
+            User user = transaction.getUser();
+            user.setOutstandingBalance(user.getOutstandingBalance() + lateFee);
+            userRepository.save(user);
         }
 
         for (int i = 0; i < books.size(); i++) {

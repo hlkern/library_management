@@ -39,6 +39,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name="membership_date")
     private LocalDateTime membershipExpirationDate;
 
+    @Column(name="outstanding_balance")
+    private Double outstandingBalance = 0.0;
+
     @Override
     public String getUsername() {
         return username;
