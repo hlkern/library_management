@@ -21,4 +21,14 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT COUNT(b) FROM Book b WHERE b.status = :status")
     long countByStatus(@Param("status") Status status);
+
+    // Kullanıcının 3.5 ve üzeri puan verdiği kitapların listesini almak için
+    @Query("SELECT b FROM Book b JOIN b.transactions t WHERE t.user.id = :userId AND b.rating >= :minRating")
+    List<Book> findBooksRatedByUserWithMinimumRating(@Param("userId") Long userId, @Param("minRating") double minRating);
+
+    @Query("SELECT b FROM Book b WHERE b.author = :author AND b.rating >= :minRating")
+    List<Book> findByAuthorAndMinimumRating(@Param("author") String author, @Param("minRating") Double minRating);
+
+    @Query("SELECT b FROM Book b WHERE b.category = :category AND b.rating >= :minRating")
+    List<Book> findByCategoryAndMinimumRating(@Param("category") String category, @Param("minRating") Double minRating);
 }

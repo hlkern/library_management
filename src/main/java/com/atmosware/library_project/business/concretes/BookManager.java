@@ -1,8 +1,6 @@
 package com.atmosware.library_project.business.concretes;
 
 import com.atmosware.library_project.business.abstracts.BookService;
-import com.atmosware.library_project.business.abstracts.NotificationService;
-import com.atmosware.library_project.business.abstracts.UserService;
 import com.atmosware.library_project.business.dtos.BookRequest;
 import com.atmosware.library_project.business.dtos.BookResponse;
 import com.atmosware.library_project.business.messages.BusinessMessages;
@@ -24,8 +22,6 @@ import java.util.List;
 public class BookManager implements BookService {
 
     private final BookRepository bookRepository;
-    private final NotificationService notificationService;
-    private final UserService userService;
     private static final Logger logger = LoggerFactory.getLogger(BookManager.class);
 
     @Override
@@ -83,9 +79,9 @@ public class BookManager implements BookService {
 
         logger.info("Book with id: {} added successfully", book.getId());
 
-        List<String> userEmails = userService.getAllUserEmails();
+        //List<String> userEmails = userService.getAllUserEmails();
 
-        notificationService.sendNotificationToAllUsers(userEmails, book.getTitle(), book.getAuthor());
+        //notificationService.sendNotificationToAllUsers(userEmails, book.getTitle(), book.getAuthor());
 
         return BookMapper.INSTANCE.mapToResponse(book);
     }
@@ -115,7 +111,7 @@ public class BookManager implements BookService {
         book.setRating(updatedRating);
         book.setRatingCount(currentRatingCount + 1);
 
-        logger.info("Book with id: {} updated successfully", bookId);
+        logger.info("Book rating updated successfully");
 
         this.bookRepository.save(book);
     }

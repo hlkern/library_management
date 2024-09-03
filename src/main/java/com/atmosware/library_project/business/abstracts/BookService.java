@@ -2,7 +2,6 @@ package com.atmosware.library_project.business.abstracts;
 
 import com.atmosware.library_project.business.dtos.BookRequest;
 import com.atmosware.library_project.business.dtos.BookResponse;
-import com.atmosware.library_project.entities.Book;
 
 import java.util.List;
 
