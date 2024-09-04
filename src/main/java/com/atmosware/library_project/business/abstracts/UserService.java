@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService {
     void payFees(Long userId, Double amount);
 
     List<String> getActiveUserEmails();
+
+    void updateExpiredMemberships();
 }

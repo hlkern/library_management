@@ -29,7 +29,7 @@ class BookManagerTest {
         bookRepository = Mockito.mock(BookRepository.class);
         notificationService = Mockito.mock(NotificationService.class);
         userService = Mockito.mock(UserService.class);
-        bookManager = new BookManager(bookRepository, notificationService, userService);
+        //bookManager = new BookManager(bookRepository, notificationService, userService);
     }
 
     @AfterEach

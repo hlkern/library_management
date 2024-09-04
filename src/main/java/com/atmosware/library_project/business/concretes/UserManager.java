@@ -133,6 +133,19 @@ public class UserManager implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public void updateExpiredMemberships() {
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+            if (user.getMembershipStatus() == MembershipStatus.ACTIVE) {
+                if ((LocalDateTime.now().isAfter(user.getMembershipExpirationDate()))) {
+                    user.setMembershipStatus(MembershipStatus.EXPIRED);
+                    userRepository.save(user);
+                }
+            }
+        }
+    }
     private void checkIfUserExistsByUsername(String username) {
 
         Optional<User> existingUser = userRepository.findByUsername(username);
