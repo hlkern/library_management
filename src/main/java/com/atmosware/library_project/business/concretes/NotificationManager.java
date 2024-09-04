@@ -10,6 +10,7 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -17,6 +18,7 @@ public class NotificationManager implements NotificationService {
 
     private final JavaMailSender mailSender;
 
+    @Override
     public void sendNotificationToAllUsers(List<String> userEmails, String bookTitle, String bookAuthor) {
         String subject = "New Book Alert";
         String body = "Dear customer, now '" + bookTitle + "' by "+ bookAuthor +" is avaliable in our library ";
@@ -40,4 +42,7 @@ public class NotificationManager implements NotificationService {
             throw new RuntimeException("Failed to send email", e);
         }
     }
+
+
+
 }

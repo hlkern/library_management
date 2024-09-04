@@ -10,7 +10,7 @@ import com.atmosware.library_project.core.utilities.exceptions.types.BusinessExc
 import com.atmosware.library_project.core.utilities.mapping.BookMapper;
 import com.atmosware.library_project.dataAccess.BookRepository;
 import com.atmosware.library_project.entities.Book;
-import com.atmosware.library_project.entities.enums.Status;
+import com.atmosware.library_project.entities.enums.BookStatus;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,14 +77,13 @@ public class BookManager implements BookService {
 
         Book book = BookMapper.INSTANCE.mapToEntity(bookRequest);
         book.setCreatedDate(LocalDateTime.now());
-        book.setStatus(Status.NEW);
+        book.setBookStatus(BookStatus.NEW);
 
         this.bookRepository.save(book);
 
         logger.info("Book with id: {} added successfully", book.getId());
 
-        List<String> userEmails = userService.getAllUserEmails();
-
+        List<String> userEmails = userService.getActiveUserEmails();
         notificationService.sendNotificationToAllUsers(userEmails, book.getTitle(), book.getAuthor());
 
         return BookMapper.INSTANCE.mapToResponse(book);

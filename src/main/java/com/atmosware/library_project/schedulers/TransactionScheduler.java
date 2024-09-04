@@ -2,7 +2,7 @@ package com.atmosware.library_project.schedulers;
 
 import com.atmosware.library_project.business.abstracts.NotificationService;
 import com.atmosware.library_project.dataAccess.TransactionRepository;
-import com.atmosware.library_project.entities.enums.Status;
+import com.atmosware.library_project.entities.enums.BookStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -23,7 +23,7 @@ public class TransactionScheduler {
         List<Transaction> transactions = transactionRepository.findAll();
 
         for (Transaction transaction : transactions) {
-            if (transaction.getStatus() == Status.BORROWED) {
+            if (transaction.getBookStatus() == BookStatus.BORROWED) {
                 LocalDateTime dueDate = transaction.getBorrowDate().plusDays(30);
                 if (LocalDateTime.now().isAfter(dueDate)) {
                     String email = transaction.getUser().getEmail();

@@ -9,6 +9,7 @@ import com.atmosware.library_project.core.utilities.exceptions.types.BusinessExc
 import com.atmosware.library_project.core.utilities.mapping.UserMapper;
 import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.User;
+import com.atmosware.library_project.entities.enums.MembershipStatus;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,10 +87,23 @@ public class UserManager implements UserService {
                 .collect(Collectors.toList());
     }
 
+    public void cancelMembership(Long id) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new BusinessException("Member not found"));
+
+        if (user.getMembershipStatus() == MembershipStatus.ACTIVE) {
+            user.setMembershipExpirationDate(LocalDateTime.now());
+            user.setMembershipStatus(MembershipStatus.CANCELED);
+            userRepository.save(user);
+        } else {
+            throw new RuntimeException("Membership is not active or already canceled/expired.");
+        }
+    }
     public void renewMembership(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new BusinessException("User not found"));
 
+        user.setMembershipStatus(MembershipStatus.ACTIVE);
         user.setMembershipExpirationDate(user.getMembershipExpirationDate().plusYears(1));
         userRepository.save(user);
     }
@@ -110,6 +124,13 @@ public class UserManager implements UserService {
         userRepository.save(user);
 
         logger.info("User with id: {} has paid {} towards outstanding fees.", userId, amount);
+    }
+
+    public List<String> getActiveUserEmails() {
+        return userRepository.findAllByMembershipStatus(MembershipStatus.ACTIVE)
+                .stream()
+                .map(User::getEmail)
+                .collect(Collectors.toList());
     }
 
     private void checkIfUserExistsByUsername(String username) {

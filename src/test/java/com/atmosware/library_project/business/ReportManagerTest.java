@@ -9,7 +9,7 @@ import com.atmosware.library_project.dataAccess.BookRepository;
 import com.atmosware.library_project.dataAccess.TransactionRepository;
 import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.Transaction;
-import com.atmosware.library_project.entities.enums.Status;
+import com.atmosware.library_project.entities.enums.BookStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -19,7 +19,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -100,9 +99,9 @@ class ReportManagerTest {
     @Test
     void getStockInfo_ShouldReturnCorrectStockInfo() {
         // Arrange
-        when(bookRepository.countByStatus(Status.BORROWED)).thenReturn(5L);
-        when(bookRepository.countByStatus(Status.RETURNED)).thenReturn(10L);
-        when(bookRepository.countByStatus(Status.NEW)).thenReturn(15L);
+        when(bookRepository.countByStatus(BookStatus.BORROWED)).thenReturn(5L);
+        when(bookRepository.countByStatus(BookStatus.RETURNED)).thenReturn(10L);
+        when(bookRepository.countByStatus(BookStatus.NEW)).thenReturn(15L);
 
         // Act
         Map<String, Long> result = reportManager.getStockInfo();

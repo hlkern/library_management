@@ -20,6 +20,12 @@ public class UserController {
     public UserResponse update(@Valid @RequestBody UserUpdateRequest userUpdateRequest, @PathVariable Long userId) {
         return userService.update(userUpdateRequest, userId);
     }
+
+    @PostMapping("/{userId}/cancel-membership")
+    public void cancelMembership(@PathVariable Long userId) {
+        this.userService.cancelMembership(userId);;
+    }
+
     @PostMapping("/renew/{userId}")
     public void renewMembership(@PathVariable Long userId) {
         this.userService.renewMembership(userId);

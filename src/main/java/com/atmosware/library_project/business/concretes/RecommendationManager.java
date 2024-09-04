@@ -24,14 +24,12 @@ public class RecommendationManager implements RecommendationService {
 
         List<Book> borrowedBooks = transactionRepository.findBorrowedBooksByUserId(userId);
 
-        // Kullanıcının 3.5 ve üzeri puan verdiği kitapları alın
         List<Book> ratedBooks  = bookRepository.findBooksRatedByUserWithMinimumRating(userId, 3.5);
 
-        // Eğer highlyRatedBooks boşsa, kullanıcıya öneri sunmak zor olabilir, bu yüzden bunu kontrol edin
         if (ratedBooks.isEmpty()) {
             return new ArrayList<>();
         }
-        // Yüksek puan verilen kitaplardan yazar ve kategorileri al
+
         List<String> authors = ratedBooks.stream()
                 .map(Book::getAuthor)
                 .distinct()
@@ -42,7 +40,6 @@ public class RecommendationManager implements RecommendationService {
                 .distinct()
                 .toList();
 
-        // Yazarlar ve kategorilere göre önerileri al
         List<Book> authorRecommendations = authors.stream()
                 .flatMap(author -> bookRepository.findByAuthorAndMinimumRating(author, 3.5).stream())
                 .distinct()
@@ -53,22 +50,16 @@ public class RecommendationManager implements RecommendationService {
                 .distinct()
                 .toList();
 
-
-
-        // Önerileri birleştir ve tekrar edenleri kaldır
         List<Book> allRecommendations = new ArrayList<>();
         allRecommendations.addAll(authorRecommendations);
         allRecommendations.addAll(categoryRecommendations);
 
-        // Kullanıcının daha önce kiraladığı kitapları çıkar
         allRecommendations.removeAll(borrowedBooks);
 
-        // Tekrar eden kitapları kaldır
         List<Book> uniqueRecommendations = allRecommendations.stream()
                 .distinct()
                 .toList();
 
-        // Kitapları BookResponse'e dönüştür
         return uniqueRecommendations.stream()
                 .map(BookMapper.INSTANCE::mapToResponse)
                 .collect(Collectors.toList());

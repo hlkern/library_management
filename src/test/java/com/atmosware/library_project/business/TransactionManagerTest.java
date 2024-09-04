@@ -12,12 +12,11 @@ import com.atmosware.library_project.dataAccess.TransactionRepository;
 import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.Book;
 import com.atmosware.library_project.entities.Transaction;
-import com.atmosware.library_project.entities.enums.Status;
+import com.atmosware.library_project.entities.enums.BookStatus;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -54,11 +53,11 @@ class TransactionManagerTest {
         // Mock kitaplar
         Book book1 = new Book();
         book1.setId(1L);
-        book1.setStatus(Status.NEW);
+        book1.setBookStatus(BookStatus.NEW);
 
         Book book2 = new Book();
         book2.setId(2L);
-        book2.setStatus(Status.NEW);
+        book2.setBookStatus(BookStatus.NEW);
 
         // bookRepository.findById çağrılarının doğru bir şekilde mocklandığından emin olun
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book1));
@@ -85,7 +84,7 @@ class TransactionManagerTest {
         // Ödünç alınmış bir kitap oluşturun
         Book borrowedBook = new Book();
         borrowedBook.setId(1L);
-        borrowedBook.setStatus(Status.BORROWED);
+        borrowedBook.setBookStatus(BookStatus.BORROWED);
 
         // bookRepository.findById çağrısının Optional.of(borrowedBook) döndürdüğünden emin olun
         when(bookRepository.findById(1L)).thenReturn(Optional.of(borrowedBook));
@@ -108,10 +107,10 @@ class TransactionManagerTest {
         Transaction transaction = new Transaction();
         Book book1 = new Book();
         book1.setId(1L);
-        book1.setStatus(Status.BORROWED);
+        book1.setBookStatus(BookStatus.BORROWED);
         Book book2 = new Book();
         book2.setId(2L);
-        book2.setStatus(Status.BORROWED);
+        book2.setBookStatus(BookStatus.BORROWED);
 
         transaction.setBooks(Arrays.asList(book1, book2));
 
@@ -124,7 +123,7 @@ class TransactionManagerTest {
 
         // Assert
         //assertNotNull(response);  // Bu satırın başarısız olmaması gerekiyor
-        assertEquals(Status.RETURNED, transaction.getBooks().get(0).getStatus());
+        assertEquals(BookStatus.RETURNED, transaction.getBooks().get(0).getBookStatus());
         verify(transactionRepository, times(1)).save(any(Transaction.class));
     }
 
@@ -138,7 +137,7 @@ class TransactionManagerTest {
         Transaction transaction = new Transaction();
         Book book = new Book();
         book.setId(1L);
-        book.setStatus(Status.RETURNED);
+        book.setBookStatus(BookStatus.RETURNED);
 
         transaction.setBooks(Collections.singletonList(book));
 
@@ -172,16 +171,16 @@ class TransactionManagerTest {
         Long userId = 1L;
         Book book = new Book();
         book.setId(1L);
-        book.setStatus(Status.BORROWED);
+        book.setBookStatus(BookStatus.BORROWED);
 
         when(userRepository.existsById(userId)).thenReturn(true);
-        when(bookRepository.findBorrowedBooksByUserId(userId, Status.BORROWED)).thenReturn(Collections.singletonList(book));
+        when(bookRepository.findBorrowedBooksByUserId(userId, BookStatus.BORROWED)).thenReturn(Collections.singletonList(book));
 
         // Act
         List<BookResponse> result = transactionManager.getBorrowedBooksByUserId(userId);
 
         // Assert
         assertEquals(1, result.size());
-        assertEquals(Status.BORROWED, result.get(0).getStatus());
+        assertEquals(BookStatus.BORROWED, result.get(0).getBookStatus());
     }
 }

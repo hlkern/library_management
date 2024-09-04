@@ -7,6 +7,7 @@ import com.atmosware.library_project.core.services.JwtService;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.dataAccess.UserRepository;
 import com.atmosware.library_project.entities.User;
+import com.atmosware.library_project.entities.enums.MembershipStatus;
 import lombok.AllArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -38,6 +39,10 @@ public class AuthManager implements AuthService {
 
         if (user.getMembershipExpirationDate().isBefore(LocalDateTime.now())) {
             throw new BusinessException(BusinessMessages.MEMBERSHIP_EXPIRED);
+        }
+
+        if (user.getMembershipStatus() != MembershipStatus.ACTIVE) {
+            throw new RuntimeException(BusinessMessages.MEMBERSHIP_IS_INACTIVE);
         }
 
         if(user == null){

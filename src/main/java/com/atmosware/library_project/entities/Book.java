@@ -1,7 +1,7 @@
 package com.atmosware.library_project.entities;
 
 import com.atmosware.library_project.core.entities.BaseEntity;
-import com.atmosware.library_project.entities.enums.Status;
+import com.atmosware.library_project.entities.enums.BookStatus;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,8 +27,8 @@ public class Book extends BaseEntity {
     @Column(name = "category")
     private String category;
 
-    @Column(name = "status")
-    private Status status;
+    @Column(name = "bookStatus")
+    private BookStatus bookStatus;
 
     @ManyToMany(mappedBy = "books")
     private Set<Transaction> transactions = new HashSet<>();

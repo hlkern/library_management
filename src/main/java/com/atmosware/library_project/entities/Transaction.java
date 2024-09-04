@@ -1,7 +1,7 @@
 package com.atmosware.library_project.entities;
 
 import com.atmosware.library_project.core.entities.BaseEntity;
-import com.atmosware.library_project.entities.enums.Status;
+import com.atmosware.library_project.entities.enums.BookStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,8 +22,8 @@ public class Transaction extends BaseEntity {
     @Column(name = "return_date")
     private LocalDateTime returnDate;
 
-    @Column(name = "status")
-    private Status status;
+    @Column(name = "bookStatus")
+    private BookStatus bookStatus;
 
     @Column(name = "due_date")
     private LocalDateTime dueDate;

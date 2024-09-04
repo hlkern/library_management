@@ -1,6 +1,7 @@
 package com.atmosware.library_project.entities;
 
 import com.atmosware.library_project.core.entities.BaseEntity;
+import com.atmosware.library_project.entities.enums.MembershipStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,10 @@ public class User extends BaseEntity implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<Transaction> transactions;
+
+    @Column(name = "membership_status")
+    @Enumerated(EnumType.STRING)
+    private MembershipStatus membershipStatus = MembershipStatus.ACTIVE;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name="user_role",

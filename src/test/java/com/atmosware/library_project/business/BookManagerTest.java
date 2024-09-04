@@ -8,11 +8,9 @@ import com.atmosware.library_project.business.dtos.BookResponse;
 import com.atmosware.library_project.core.utilities.exceptions.types.BusinessException;
 import com.atmosware.library_project.dataAccess.BookRepository;
 import com.atmosware.library_project.entities.Book;
-import com.atmosware.library_project.entities.enums.Status;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
 
-import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
