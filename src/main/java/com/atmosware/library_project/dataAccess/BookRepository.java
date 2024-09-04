@@ -30,4 +30,8 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     @Query("SELECT b FROM Book b WHERE b.category = :category AND b.rating >= :minRating")
     List<Book> findByCategoryAndMinimumRating(@Param("category") String category, @Param("minRating") Double minRating);
+
+    @Query("SELECT b FROM Book b WHERE b.title = :title AND b.author = :author")
+    List<Book> findByTitleAndAuthor(@Param("title") String title, @Param("author") String author);
 }
+
