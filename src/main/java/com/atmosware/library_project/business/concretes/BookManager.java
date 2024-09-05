@@ -83,7 +83,7 @@ public class BookManager implements BookService {
 
         logger.info("Book with id: {} added successfully", book.getId());
 
-        List<String> userEmails = userService.getActiveUserEmails();
+        List<String> userEmails = userService.getActiveAndWithPermissionUserEmails();
         notificationService.sendNotificationToAllUsers(userEmails, book.getTitle(), book.getAuthor());
 
         return BookMapper.INSTANCE.mapToResponse(book);

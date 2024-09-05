@@ -16,27 +16,9 @@ import java.util.stream.Collectors;
 
 public class BookSearchManager implements BookSearchService {
     private final BookRepository bookRepository;
+
     @Override
     public List<Book> searchBooks(String title, String author, String category) {
-        List<Book> books = bookRepository.findAll();
-
-        if (title != null && !title.isEmpty()) {
-            books = books.stream()
-                    .filter(book -> book.getTitle().toLowerCase().contains(title.toLowerCase()))
-                    .collect(Collectors.toList());
-        }
-
-        if (author != null && !author.isEmpty()) {
-            books = books.stream()
-                    .filter(book -> book.getAuthor().toLowerCase().contains(author.toLowerCase()))
-                    .collect(Collectors.toList());
-        }
-
-        if (category != null && !category.isEmpty()) {
-            books = books.stream()
-                    .filter(book -> book.getCategory().toLowerCase().contains(category.toLowerCase()))
-                    .collect(Collectors.toList());
-        }
-        return books;
+        return bookRepository.searchBooks(title, author, category);
     }
 }

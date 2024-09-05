@@ -44,7 +44,7 @@ public class TransactionScheduler {
         List<User> users = userRepository.findAll();
 
         for (User user : users) {
-            if (user.getMembershipStatus() == MembershipStatus.ACTIVE) {
+            if (user.getMembershipStatus() == MembershipStatus.ACTIVE || user.getEmailPermission()) {
                 if (LocalDateTime.now().isAfter(user.getMembershipExpirationDate())) {
                     String email = user.getEmail();
                     String subject = "Membership Expiration Notice";

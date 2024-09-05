@@ -30,5 +30,7 @@ public class    RegisterRequest {
             message = "Password must be between 8 and 20 characters and include at least one number and one letter")
     private String password;
 
+    private Boolean emailPermission;
+
     private Role role;
 }

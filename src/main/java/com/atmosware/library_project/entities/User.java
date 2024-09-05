@@ -47,6 +47,9 @@ public class User extends BaseEntity implements UserDetails {
     @Column(name="outstanding_balance")
     private Double outstandingBalance = 0.0;
 
+    @Column(name = "email_permission")
+    private Boolean emailPermission;
+
     @Override
     public String getUsername() {
         return username;

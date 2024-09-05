@@ -33,7 +33,7 @@ public class UserManager implements UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserManager.class);
 
     @Override
-    public void register(RegisterRequest registerRequest) {
+    public void register(RegisterRequest registerRequest) { //TODO kayıt olurken mail izni istensin
 
         checkIfUserExistsByUsername(registerRequest.getUsername());
         checkIfUserExistsByEmail(registerRequest.getEmail());
@@ -43,6 +43,7 @@ public class UserManager implements UserService {
         user.setPassword(encodedPassword);
         user.setCreatedDate(LocalDateTime.now());
         user.setMembershipExpirationDate(LocalDateTime.now().plusYears(1));
+        user.setEmailPermission(registerRequest.getEmailPermission());
         userRepository.save(user);
 
         logger.info("User with id: {} registered successfully", user.getId());
@@ -126,8 +127,8 @@ public class UserManager implements UserService {
         logger.info("User with id: {} has paid {} towards outstanding fees.", userId, amount);
     }
 
-    public List<String> getActiveUserEmails() {
-        return userRepository.findAllByMembershipStatus(MembershipStatus.ACTIVE)
+    public List<String> getActiveAndWithPermissionUserEmails() {
+        return userRepository.findAllByEmailPermissionTrueAndMembershipStatus(MembershipStatus.ACTIVE)
                 .stream()
                 .map(User::getEmail)
                 .collect(Collectors.toList());

@@ -13,6 +13,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
-    List<User> findAllByMembershipStatus(MembershipStatus membershipStatus);
+    List<User> findAllByEmailPermissionTrueAndMembershipStatus(MembershipStatus status);
 
 }
